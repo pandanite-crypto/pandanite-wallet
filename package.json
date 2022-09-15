@@ -58,7 +58,7 @@
             "name": "Bamboo_Wallet",
             "options": {
             	"iconUrl": "./icons/win/icon.ico",
-            	"seti[Ocpm": "./icons/win/icon.ico"
+            	"setupIcon": "./icons/win/icon.ico"
             }
           }
         },

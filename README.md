@@ -1,5 +1,6 @@
 <h2>Bamboo Electron Wallet</h2>
 
+<img src="https://github.com/mrmikeo/bamboo-wallet/raw/main/static/media/screenshot.png">
 
 <h3>Download</h3>
 
