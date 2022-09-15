@@ -394,11 +394,23 @@ io.on('connection', (socket) => {
 				};
 		
 				loadedAccount = address;
-		
+						
 				await db.accounts.remove({account: address});
 				
 				await db.accounts.insert(dbrecord);
-		
+				
+				await getAccountTransactions();
+
+				twig.view = {
+					i18n: i18n,
+					version: bambooAppVersion,
+					loadedAccount: loadedAccount,
+					accountBalance: accountBalance,
+					localesObject: JSON.stringify(localesObject),
+					peers: JSON.stringify(peers),
+					selectedPeer: selectedPeer
+				}
+				
 				callback(newAccount);
 			
 			}
@@ -447,11 +459,23 @@ io.on('connection', (socket) => {
 				};
 	
 				loadedAccount = address;
-	
+						
 				await db.accounts.remove({account: address});
 			
 				await db.accounts.insert(dbrecord);
-	
+				
+				await getAccountTransactions();
+
+				twig.view = {
+					i18n: i18n,
+					version: bambooAppVersion,
+					loadedAccount: loadedAccount,
+					accountBalance: accountBalance,
+					localesObject: JSON.stringify(localesObject),
+					peers: JSON.stringify(peers),
+					selectedPeer: selectedPeer
+				}
+				
 				callback(newAccount);
 			
 			} catch (e) {
