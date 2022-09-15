@@ -25,3 +25,7 @@ npm start
 <h3>Participate</h3>
 
 Feel free to make a pull request if you can make improvements to the code or language files
+
+<h3>Make a Backup</h3>
+
+Be sure to print out or write down your Mnemonic Phrase for your account.  It will be the only way to recover your account in the case of data loss.

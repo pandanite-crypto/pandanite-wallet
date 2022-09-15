@@ -6,14 +6,16 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "makewin": "electron-forge make --platform win32",
+    "makemac": "electron-forge make --platform darwin",
+    "makelinux": "electron-forge make --platform linux"
   },
   "repository": "https://github.com/mrmikeo/bamboo-wallet",
   "keywords": [
-    "Electron",
-    "Node",
-    "Template",
-    "Hackathon"
+    "Bamboo",
+    "Wallet",
+    "Electron"
   ],
   "author": "GitHub",
   "license": "CC0-1.0",
