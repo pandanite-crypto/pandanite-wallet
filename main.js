@@ -19,7 +19,9 @@ const portfinder 			= require('portfinder');
 
 var db = {};
 
-var bambooAppVersion = 'v1.0.0';
+var packageJson 			= require('./package.json');
+
+var bambooAppVersion = 'v' + packageJson.version;
 
 const userDataPath = app.getPath('userData');
 var accountsdb = path.join(userDataPath, 'accounts.db');
@@ -329,7 +331,17 @@ io.on('connection', (socket) => {
 			loadedAccount = address;
 		
 			await db.accounts.insert(dbrecord);
-		
+
+			twig.view = {
+				i18n: i18n,
+				version: bambooAppVersion,
+				loadedAccount: loadedAccount,
+				accountBalance: accountBalance,
+				localesObject: JSON.stringify(localesObject),
+				peers: JSON.stringify(peers),
+				selectedPeer: selectedPeer
+			}
+				
 			callback(newAccount);
 		
 		})();
