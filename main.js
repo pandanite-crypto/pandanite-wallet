@@ -14,13 +14,18 @@ const bip39 				= require('bip39');
 const got 					= require('got');
 const Datastore 			= require('nedb-promises');
 const Big					= require('big.js');
+const path					= require('path');
 
 var db = {};
 
 var bambooAppVersion = 'v1.0.0';
 
-db.accounts = Datastore.create(`${app.getAppPath('userData')}/data/accounts.db`);
-db.settings = Datastore.create(`${app.getAppPath('userData')}/data/settings.db`);
+const userDataPath = app.getPath('userData');
+var accountsdb = path.join(userDataPath, 'accounts.db');
+var settingsdb = path.join(userDataPath, 'settings.db');
+
+db.accounts = Datastore.create(accountsdb);
+db.settings = Datastore.create(settingsdb);
 
 db.accounts.ensureIndex({ fieldName: 'account' }, function (err) {
   // If there was an error, err is not null
