@@ -17,6 +17,8 @@ const Big					= require('big.js');
 
 var db = {};
 
+var bambooAppVersion = 'v1.0.0';
+
 db.accounts = Datastore.create(`${app.getAppPath('userData')}/data/accounts.db`);
 db.settings = Datastore.create(`${app.getAppPath('userData')}/data/settings.db`);
 
@@ -93,7 +95,7 @@ let mainWindow
 
 twig.view = {
     i18n: i18n,
-    version: 'v0.1.0',
+    version: bambooAppVersion,
     localesObject: JSON.stringify(localesObject),
     peers: JSON.stringify(peers),
     selectedPeer: selectedPeer
@@ -648,7 +650,7 @@ io.on('connection', (socket) => {
 
 						twig.view = {
 							i18n: i18n,
-							version: 'v0.1.0',
+							version: bambooAppVersion,
 							loadedAccount: loadedAccount,
 							accountBalance: accountBalance,
 							localesObject: JSON.stringify(localesObject),
