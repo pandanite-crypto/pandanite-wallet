@@ -276,9 +276,33 @@ io.on('connection', (socket) => {
 
 	socket.on('updateLocale', (locale, callback) => {
 
-		i18n.setLocale(locale);
+		(async () => {
 		
-		callback(true);
+			i18n.setLocale(locale);
+		
+			let havesettings = await db.settings.find({account: loadedAccount});
+			
+			if (havesettings.length == 0)
+			{
+			
+				let newSettings = {
+					account: loadedAccount,
+					locale: locale
+				}
+				
+				await db.settings.insert(newSettings);
+			
+			}
+			else
+			{
+				
+				await db.settings.update({account: loadedAccount}, {locale: locale});
+			
+			}
+		
+			callback(true);
+		
+		})();
 
 	});
 	
@@ -698,6 +722,10 @@ io.on('connection', (socket) => {
 					{
 					
 						loadedAccount = decryptedAccount.address;
+
+						let havesettings = await db.settings.findOne({account: loadedAccount});
+						
+						if (havesettings && havesettings.locale) i18n.setLocale(havesettings.locale);
 
 						twig.view = {
 							i18n: i18n,

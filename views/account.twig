@@ -114,7 +114,7 @@ $(document).ready(function() {
 				  data.map(txinfo => [
 					(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
 					txinfo.to == loadedAddress ? 'Receive' : 'Send',
-					txinfo.txid,
+					gridjs.html(`<span class='transactioninfo' data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>`),
 					Big(txinfo.amount).div(10**4).toFixed(4)
 				  ])
 				);
@@ -146,7 +146,81 @@ $(document).ready(function() {
 	});
 
 
+	grid.on('ready', function() {
+		
+		infoButtons();
+     
+	});
 
+	function infoButtons() {
+	
+		$('.transactioninfo').off('click');
+		$('.transactioninfo').on('click', function() {
+	
+			let thistxid = $(this).data('txid');
+			let thisfrom = $(this).data('from');
+			let thisto = $(this).data('to');
+			
+			let thisamount = '0.0000';
+			
+			try {
+				thisamount = Big($(this).data('amount')).div(10**4).toFixed(4);
+			} catch (e) {
+				
+			}	
+			
+			let thisfee = '0.0000';
+			
+			try {
+				thisfee = Big($(this).data('fee')).div(10**4).toFixed(4);
+			} catch (e) {
+				
+			}
+			
+			let thistimestamp = $(this).data('timestamp');
+
+			var htmlcode = `<div style="color: #000;">
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Transaction ID") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-txid" style="font-weight: bold; border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+					<div id="copy-input-txid" class="nicescrollable" style="padding:2px;">` + thistxid + `</div>
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("From Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr" style="font-weight: bold;  border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+					<div id="copy-input-addr" class="nicescrollable" style="padding:2px;">` + thisfrom + `</div>
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("To Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr2" style="font-weight: bold;  border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+					<div id="copy-input-addr2" class="nicescrollable" style="padding:2px;">` + thisto + `</div>
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Amount") }}</div>
+					<div style="padding:2px;" class="nicescrollable">` + thisamount + `</div>
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Fee") }}</div>
+					<div style="padding:2px;" class="nicescrollable">` + thisfee + `</div>
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Timestamp") }}</div>
+					<div style="padding:2px;" class="nicescrollable">` + (new Date(parseInt(thistimestamp))).toLocaleString() + `</div>
+					</div>`;
+
+		  	var frag = document.createRange().createContextualFragment('<div style="text-align:left;">' + htmlcode + '</div>');
+  
+		  	let wrapper = document.createElement('div');
+		  	wrapper.appendChild(frag);
+
+		  	const el = wrapper.firstChild;
+  
+		  	const swaltext = "{{ i18n.__("Transaction Details") }}";
+		  
+			swal({
+			  text: swaltext,
+			  content: el,
+			  buttons: {
+				confirm: "{{ i18n.__("OK") }}",
+			  },
+			});
+				
+			$(".nicescrollable").niceScroll();
+
+  			new ClipboardJS('.copy-button');
+  	
+  			$('.copy-button').popover({trigger: 'focus', content: "{{ i18n.__("Copied") }}", delay: { "hide": 900 }});
+
+		});
+	
+	}
+	
 	socket.emit('accountInfo', function(accountInfo) {
 	
 		$('#accountaddress').html(accountInfo.address);

@@ -75,5 +75,12 @@
 	"View KeyPair Info": "View KeyPair Info",
 	"Getting Account Info": "Getting Account Info",
 	"Error: Peer info seems invalid": "Error: Peer info seems invalid",
-	"Error: Unable to view account.  Check password and try again.": "Error: Unable to view account.  Check password and try again."
+	"Error: Unable to view account.  Check password and try again.": "Error: Unable to view account.  Check password and try again.",
+	"Transaction ID": "Transaction ID",
+	"From Address": "From Address",
+	"To Address": "To Address",
+	"Fee": "Fee",
+	"Timestamp": "Timestamp",
+	"Transaction Details": "Transaction Details",
+	"OK": "OK"
 }

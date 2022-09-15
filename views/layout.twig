@@ -63,6 +63,30 @@
 			background: #ddd;
 		}
 
+		.swal-text:first-child {
+			margin-top: 0px;
+			padding: 10px;
+			font-weight: bold;
+			border-bottom: 1px solid #aaa;
+    		width: 100%;
+    		border-top-right-radius: 5px;
+    		border-top-left-radius: 5px;
+    		color: #fff;
+    		background-color: #12121c;
+    		max-width: 100%;
+    	}
+    	
+		.swal-footer {
+		  background-color: rgb(245, 248, 250);
+		  margin-top: 32px;
+		  border-top: 1px solid #E9EEF1;
+		  overflow: hidden;
+		}
+		
+		.popover {
+			z-index: 99999;
+		}
+		
 		//
 		
 	</style>
@@ -123,6 +147,8 @@
   <script src="../vendor/socket.io/socket.io.min.js"></script>
   <script src="../vendor/grid/gridjs.umd.js"></script>
   <script src="../vendor/clipboard.min.js"></script>
+  <script src="../vendor/sweetalert.min.js"></script>
+  <script src="../vendor/jquery.nicescroll.min.js"></script>
 
   <script>
     var socket = io('http://localhost:{{serverPort}}');
