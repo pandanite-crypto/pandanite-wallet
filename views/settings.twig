@@ -1,0 +1,266 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right" style="padding-top:15px;">
+			<form class="accountWrapper">
+				<fieldset>
+				
+					<div class="form-group" style="width:29%; display: inline-block;">
+						<label>{{ i18n.__("Language") }}</label>
+						<select id="language" name="language" class="form-control"></select>
+					</div>
+					
+					<div class="form-group" style="width:59%; display: inline-block;">
+						<label>{{ i18n.__("Connected Peer") }}</label>
+						<select id="peer" name="peer" class="form-control"></select>
+					</div>
+					
+					
+					
+					<div class="form-group" style="width:20%; display: inline-block;">
+						<label>{{ i18n.__("Protocol") }}</label>
+						<select id="peerproto" name="peer" class="form-control">
+							<option value="http">http</option>
+							<option value="https">https</option>
+						</select>
+					</div>
+					<div class="form-group" style="width:30%; display: inline-block;">
+						<label>{{ i18n.__("IP/Hostname") }}</label>
+						<input id="peerhost" type="text" name="peerhost" class="form-control" />
+					</div>
+					<div class="form-group" style="width:20%; display: inline-block;">
+						<label>{{ i18n.__("Port") }}</label>
+						<input id="peerport" type="text" name="peerport" class="form-control" />
+					</div>
+					<div class="form-group" style="width:25%; display: inline-block;">
+						<button id="newpeerbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Add Custom Peer") }}</button>
+					</div>
+					
+					<span id="addpeererr" style="color: red;"></span>
+					
+					<div class="form-bottom text-center">
+					<h4 class="or">{{ i18n.__("Keys") }}</h4>
+					</div>
+					
+					<div class="form-group">
+						<label>{{ i18n.__("Your Encryption Password") }}</label>
+						<input id="password" type="password" name="password" class="form-control form-control-password" />
+						<span id="passerr" style="color: red;"></span>
+					</div>
+					<button id="viewbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("View KeyPair Info") }}</button>
+					
+					<div class="progress" id="viewprogress" style="display:none; height:50px;">
+					  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%; color: #fff; text-align:center;">{{ i18n.__("Getting Account Info") }} ...</div>
+					</div>
+					
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+
+  let currentLocale = "{{ i18n.getLocale() }}";
+  let localesObject = JSON.parse(`{{ localesObject }}`);
+  let availLocales = Object.keys(localesObject);
+  
+  availLocales.forEach(item => {
+  	
+  	if (item == currentLocale)
+  	{
+  	  $('#language').append(`<option selected value="${item}">${localesObject[item]}</option>`);
+  	}
+  	else
+  	{
+  	  $('#language').append(`<option value="${item}">${localesObject[item]}</option>`);
+  	}
+  	
+  });
+
+  let selectedPeer = "{{ selectedPeer }}";
+  let peers = {{ peers }};
+  
+  peers.forEach(item => {
+  	
+  	if (item == selectedPeer)
+  	{
+  	  $('#peer').append(`<option selected value="${item}">${item}</option>`);
+  	}
+  	else
+  	{
+  	  $('#peer').append(`<option value="${item}">${item}</option>`);
+  	}
+  	
+  });
+  
+  $('#language').on('change', (e) => {
+  
+  	socket.emit('updateLocale', $('#language').val(), function(result) {
+  	
+  		if (result == true) router.route('GET', '/settings', () => {});
+  	
+  	});
+  
+  });
+  
+  $('#peer').on('change', (e) => {
+  
+  	socket.emit('updatePeer', $('#peer').val(), function(result) {
+  	
+  		if (result == true) router.route('GET', '/settings', () => {});
+  	
+  	});
+  
+  });
+  
+  $('#newpeerbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	let thisPeer;
+  	
+  	if ($('#peerport').val() == '')
+  	{
+		thisPeer = $('#peerproto').val() + "://" + $('#peerhost').val();
+	}
+	else
+	{
+		thisPeer = $('#peerproto').val() + "://" + $('#peerhost').val() + ":" + $('#peerport').val();
+	}
+	
+	var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+	var regex = new RegExp(expression);
+	
+	if (thisPeer.match(regex)) {
+	  
+		socket.emit('addCustomPeer', thisPeer, function(result) {
+	
+			if (result == true) router.route('GET', '/settings', () => {});
+	
+		});
+	  
+	}
+	else
+	{
+	
+		$('#addpeererr').html("{{ i18n.__("Error: Peer info seems invalid") }}");
+	
+	}
+
+  });
+	
+  $('#viewbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	if ($('#password').val() == '')
+  	{
+
+  		$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+  	
+  	}
+  	else
+  	{
+
+		$('#viewbutton').show();
+		$('#viewprogress').hide();
+				
+		socket.emit('getAccountKeys', $('#password').val(), function(accountInfo) {
+
+			if (accountInfo.address)
+			{
+			
+				$('#userform2').html(`<div class="right" id="webform">
+									<form class="accountWrapper">
+										<fieldset>
+											<center>
+											<h1><img src="../static/media/bamboo-bmb-logo.png" style="height:50px;"> {{ i18n.__("Bamboo Wallet") }}</h1>
+											</center>
+											<div class="form-group" style="margin-top:30px;">
+												<label>{{ i18n.__("Your Account Address") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.address + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Mnemonic Phrase") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.mnemonic + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Public Key") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.publicKey + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Private Key") }}</label>
+												<textarea class="form-control" style="height: 82px;">` + accountInfo.privateKey + `</textarea>
+											</div>
+											
+											<div id="buttonsdiv" style="width:100%; text-align:center">
+												<button id="gotoaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-right:10px;">{{ i18n.__("Continue") }}</button>
+												<button id="printpage" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-left:10px;"><i class="icofont-print"></i> {{ i18n.__("Print Page") }}</button>
+											</div>
+											<div id="warningdiv" style="text-align:center; margin-top:10px;">
+												<strong>
+												{{ i18n.__("Put this in a safe place!") }}<br />
+												{{ i18n.__("Do not transmit over insecure methods such as email.") }}<br />
+												{{ i18n.__("You can also print this later as long as you have your encryption password.") }}
+												</strong>
+											</div>
+										</fieldset>
+									</form>
+								</div>`);
+								
+					$('#gotoaccount').on('click', function(e) {
+
+						e.preventDefault();
+
+						router.route('GET', '/account', () => {});
+					
+					});		
+								
+					$('#printpage').on('click', function(e) {
+
+						e.preventDefault();
+						
+						$("#buttonsdiv").hide();
+						
+						$("#topnav").hide();
+
+						socket.emit('print', function(status) {
+
+							$("#buttonsdiv").show();
+							
+							$("#topnav").show();
+						
+						});
+					
+					});	
+								
+								
+			}
+			else
+			{
+
+				$('#viewbutton').show();
+				$('#viewprogress').hide();
+	
+				$('#passerr').html("{{ i18n.__("Error: Unable to view account.  Check password and try again.") }}");
+
+			}
+			
+  		});
+  		
+  	}
+  	
+  })
+
+    
+});    
+
+</script>
+{% endblock %}

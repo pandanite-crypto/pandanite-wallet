@@ -1,0 +1,159 @@
+{% extends 'layout_nohead.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right">
+			<form class="accountWrapper">
+				<center>{{ i18n.__("This password is used for encrypting your key data on your local hard drive") }}</center><br /><br />
+				<fieldset>
+					<div class="form-group">
+						<label>{{ i18n.__("Create Encryption Password") }}</label>
+						<input id="password" type="password" name="password" class="form-control form-control-password" autofocus/>
+						<span id="passerr" style="color: red;"></span>
+					</div>
+					<div class="form-group">
+						<label>{{ i18n.__("Re-enter Encryption Password") }}</label>
+						<input id="password2" type="password" name="password" class="form-control form-control-password" />
+						<span id="pass2err" style="color: red;"></span>
+					</div>
+					<button id="createbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Create Account") }}</button>
+					<br />
+					
+					<center><button id="cancelbutton" class="btn btn-danger" style="width:100px; margin-top:10px;">{{ i18n.__("Cancel") }}</button></center>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+
+  $('#mainfooter').hide();
+
+  $('#cancelbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	router.route('GET', '/login', () => {});
+  
+  });
+  	
+  	
+  $('#createbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+	$('#passerr').html("");
+	$('#pass2err').html("");
+
+  	if ($('#password').val() == '')
+  	{
+  		
+  		$('#passerr').html("{{ i18n.__("Error: Enter A Password") }}");
+  	
+  	}
+  	else if ($('#password2').val() == '')
+  	{
+
+  		$('#pass2err').html("{{ i18n.__("Error: Enter A Password") }}");
+  	
+  	}
+  	else if ($('#password2').val() != $('#password').val())
+  	{
+
+  		$('#pass2err').html("{{ i18n.__("Error: Passwords do not match") }}");
+  	
+  	}
+  	else
+  	{
+
+		socket.emit('createAccount', $('#password').val(), function(accountInfo) {
+
+			if (accountInfo.address)
+			{
+			
+				$('#userform2').html(`<div class="right" id="webform">
+									<form class="accountWrapper">
+										<fieldset>
+											<center>
+											<h1><img src="../static/media/bamboo-bmb-logo.png" style="height:50px;"> {{ i18n.__("Bamboo Wallet") }}</h1>
+											</center>
+											<div class="form-group" style="margin-top:30px;">
+												<label>{{ i18n.__("Your Account Address") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.address + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Mnemonic Phrase") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.mnemonic + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Public Key") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.publicKey + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Private Key") }}</label>
+												<textarea class="form-control" style="height: 82px;">` + accountInfo.privateKey + `</textarea>
+											</div>
+											
+											<div id="buttonsdiv" style="width:100%; text-align:center">
+												<button id="gotoaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-right:10px;">{{ i18n.__("Continue") }}</button>
+												<button id="printpage" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-left:10px;"><i class="icofont-print"></i> {{ i18n.__("Print Page") }}</button>
+											</div>
+											<div id="warningdiv" style="text-align:center; margin-top:10px;">
+												<strong>
+												{{ i18n.__("Put this in a safe place!") }}<br />
+												{{ i18n.__("Do not transmit over insecure methods such as email.") }}<br />
+												{{ i18n.__("You can also print this later as long as you have your encryption password.") }}
+												</strong>
+											</div>
+										</fieldset>
+									</form>
+								</div>`);
+								
+					$('#gotoaccount').on('click', function(e) {
+
+						e.preventDefault();
+
+						router.route('GET', '/account', () => {});
+					
+					});		
+								
+					$('#printpage').on('click', function(e) {
+
+						e.preventDefault();
+						
+						$("#buttonsdiv").hide();
+
+						socket.emit('print', function(status) {
+
+							$("#buttonsdiv").show();
+						
+						});
+					
+					});	
+								
+								
+			}
+			else
+			{
+
+				$('#passerr').html("{{ i18n.__("Error: Unable to generate account.  Please try again.") }}");
+
+			}
+
+  		});
+  		
+  	}
+  	
+  })
+
+    
+});    
+
+</script>
+{% endblock %}

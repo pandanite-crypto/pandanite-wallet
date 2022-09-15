@@ -1,0 +1,274 @@
+{% extends 'layout_nohead.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right" style="padding-top:0px;">
+			<form class="accountWrapper">
+				<fieldset>
+					<center>{{ i18n.__("Restore your account using your mnemonic phrase") }}</center><br /><br />
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 1") }}</label>
+						<input id="word1" type="text" name="word1" class="form-control" autofocus/>
+						<span id="word1err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 2") }}</label>
+						<input id="word2" type="text" name="word2" class="form-control"/>
+						<span id="word2err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 3") }}</label>
+						<input id="word3" type="text" name="word3" class="form-control"/>
+						<span id="word3err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 4") }}</label>
+						<input id="word4" type="text" name="word4" class="form-control"/>
+						<span id="word4err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 5") }}</label>
+						<input id="word5" type="text" name="word5" class="form-control"/>
+						<span id="word5err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 6") }}</label>
+						<input id="word6" type="text" name="word6" class="form-control"/>
+						<span id="word6err" style="color: red;"></span>
+					</div>
+
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 7") }}</label>
+						<input id="word7" type="text" name="word7" class="form-control" autofocus/>
+						<span id="word7err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 8") }}</label>
+						<input id="word8" type="text" name="word8" class="form-control"/>
+						<span id="word8err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 9") }}</label>
+						<input id="word9" type="text" name="word9" class="form-control"/>
+						<span id="word9err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 10") }}</label>
+						<input id="word10" type="text" name="word10" class="form-control"/>
+						<span id="word10err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 11") }}</label>
+						<input id="word11" type="text" name="word11" class="form-control"/>
+						<span id="word11err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 12") }}</label>
+						<input id="word12" type="text" name="word12" class="form-control"/>
+						<span id="word12err" style="color: red;"></span>
+					</div>
+
+					<div class="form-group">
+						<label>{{ i18n.__("Create Encryption Password") }}</label>
+						<input id="password" type="password" name="password" class="form-control form-control-password" autofocus/>
+						<span id="passerr" style="color: red;"></span>
+					</div>
+					<div class="form-group">
+						<label>{{ i18n.__("Re-enter Encryption Password") }}</label>
+						<input id="password2" type="password" name="password" class="form-control form-control-password" />
+						<span id="pass2err" style="color: red;"></span>
+					</div>
+					<button id="restorebutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Restore Account") }}</button>
+					<div class="progress" id="restoreprogress" style="display:none; height:50px;">
+					  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%; color: #fff; text-align:center;">{{ i18n.__("Restoring Account") }} ...</div>
+					</div>
+					<br />
+					<center><button id="cancelbutton" class="btn btn-danger" style="width:100px; margin-top:10px;">{{ i18n.__("Cancel") }}</button> &nbsp; <button id="restoreprivbutton" class="btn btn-primary" style="margin-top:10px;">{{ i18n.__("Restore With KeyPair Instead") }}</button></center>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+
+  $('#restoreprivbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	router.route('GET', '/restorepriv', () => {});
+  
+  });
+  
+  $('#cancelbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	router.route('GET', '/login', () => {});
+  
+  });
+  
+  $('#restorebutton').on('click', (e) => {
+  
+  	$('#passerr').html("");
+  	$('#pass2err').html("");
+
+  	e.preventDefault();
+		
+  	let worderr = false;
+  	
+  	for (let i = 1; i <= 12; i++)
+  	{
+  	
+  		$('#word' + i + 'err').html("");
+  		
+  		if ($('#word' + i).val() == '')
+  		{
+  		
+  			$('#word' + i + 'err').html("{{ i18n.__("Missing Word") }}");
+  		
+  			worderr = true;
+  		}
+  	
+  	}
+  	
+  	if (worderr)
+  	{
+  	
+  		// Missing a word
+  	
+  	}
+  	else if ($('#password').val() == '')
+  	{
+  		
+  		$('#passerr').html("{{ i18n.__("Error: Enter A Password") }}");
+  	
+  	}
+  	else if ($('#password2').val() == '')
+  	{
+
+  		$('#pass2err').html("{{ i18n.__("Error: Enter A Password") }}");
+  	
+  	}
+  	else if ($('#password2').val() != $('#password').val())
+  	{
+
+  		$('#pass2err').html("{{ i18n.__("Error: Passwords do not match") }}");
+  	
+  	}
+  	else
+  	{
+
+		$('#restorebutton').hide();
+		$('#restoreprogress').show();
+	
+  		let restorevars = {
+  			word1: $('#word1').val(),
+  			word2: $('#word2').val(),
+  			word3: $('#word3').val(),
+  			word4: $('#word4').val(),
+  			word5: $('#word5').val(),
+  			word6: $('#word6').val(),
+  			word7: $('#word7').val(),
+  			word8: $('#word8').val(),
+  			word9: $('#word9').val(),
+  			word10: $('#word10').val(),
+  			word11: $('#word11').val(),
+  			word12: $('#word12').val(),
+			password: $('#password').val()
+  		}
+
+		socket.emit('restoreAccount', restorevars, function(accountInfo) {
+
+			if (accountInfo.address)
+			{
+			
+				$('#userform2').html(`<div class="right" id="webform">
+									<form class="accountWrapper">
+										<fieldset>
+											<center>
+											<h1><img src="../static/media/bamboo-bmb-logo.png" style="height:50px;"> {{ i18n.__("Bamboo Wallet") }}</h1>
+											</center>
+											<div class="form-group" style="margin-top:30px;">
+												<label>{{ i18n.__("Your Account Address") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.address + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Mnemonic Phrase") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.mnemonic + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Public Key") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.publicKey + `</textarea>
+											</div>
+											
+											<div class="form-group">
+												<label>{{ i18n.__("Private Key") }}</label>
+												<textarea class="form-control" style="height: 82px;">` + accountInfo.privateKey + `</textarea>
+											</div>
+											
+											<div id="buttonsdiv" style="width:100%; text-align:center">
+												<button id="gotoaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-right:10px;">{{ i18n.__("Continue") }}</button>
+												<button id="printpage" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-left:10px;"><i class="icofont-print"></i> {{ i18n.__("Print Page") }}</button>
+											</div>
+											<div id="warningdiv" style="text-align:center; margin-top:10px;">
+												<strong>
+												{{ i18n.__("Put this in a safe place!") }}<br />
+												{{ i18n.__("Do not transmit over insecure methods such as email.") }}<br />
+												{{ i18n.__("You can also print this later as long as you have your encryption password.") }}
+												</strong>
+											</div>
+										</fieldset>
+									</form>
+								</div>`);
+								
+					$('#gotoaccount').on('click', function(e) {
+
+						e.preventDefault();
+
+						router.route('GET', '/account', () => {});
+					
+					});		
+								
+					$('#printpage').on('click', function(e) {
+
+						e.preventDefault();
+						
+						$("#buttonsdiv").hide();
+
+						socket.emit('print', function(status) {
+
+							$("#buttonsdiv").show();
+						
+						});
+					
+					});	
+								
+								
+			}
+			else
+			{
+
+
+				$('#restorebutton').show();
+				$('#restoreprogress').hide();
+	
+				$('#pass2err').html("{{ i18n.__("Error: Unable to generate account.  Please try again.") }}");
+
+			}
+
+  		});
+  		
+  	}
+  	
+  })
+
+    
+});    
+
+</script>
+{% endblock %}

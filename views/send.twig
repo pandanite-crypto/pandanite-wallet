@@ -1,0 +1,151 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right">
+			<form class="accountWrapper">
+				<center><h2>{{ i18n.__("Account Balance") }}: {{accountBalance}} BMB</h2></center><br />
+				<fieldset>
+					<div class="form-group">
+						<label>{{ i18n.__("Send To Account") }}</label>
+						<input id="toaccount" type="text" name="toaccount" class="form-control" autofocus/>
+						<span id="accounterr" style="color: red;"></span>
+					</div>
+					<div class="form-group">
+						<label>{{ i18n.__("Amount") }}</label>
+						<input id="amount" type="number" name="amount" class="form-control" autofocus/>
+						<span id="amounterr" style="color: red;"></span>
+					</div>
+					<div class="form-group">
+						<label>{{ i18n.__("Your Encryption Password") }}</label>
+						<input id="password" type="password" name="password" class="form-control form-control-password" />
+						<span id="passerr" style="color: red;"></span>
+					</div>
+					<button id="sendbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Send") }}</button>
+					<div class="progress" id="loginprogress" style="display:none; height:50px;">
+					  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%; color: #fff; text-align:center;">{{ i18n.__("Sending Transaction") }} ...</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>window.Big = require('big.js');</script>
+<script>
+
+$(document).ready(function() {
+
+  $('#amount').on('change', function() {
+  
+  	try {
+  	
+  		$('#amount').val(Big($('#amount').val()).toFixed(4));
+  		
+  	} catch (e) {
+  	
+  		$('#amount').val('0.0000');
+  	
+  	}
+  
+  });  
+
+  $('#sendbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	let valueErr = false;
+  	
+  	try {
+  	
+  		let testValue = Big($('#amount').val());
+
+  	} catch (e) {
+  	
+  		valueErr = true;
+  	
+  	}
+  	
+  	if (valueErr)
+  	{
+
+  		$('#amounterr').html("{{ i18n.__("Error: Enter a valid amount") }}");
+  	
+  	}
+  	else if (Big(testValue).minus(0.0001).gt({{accountBalance}}))
+  	{
+
+  		$('#amounterr').html("{{ i18n.__("Error: Value exceeds account balance") }}");
+  	
+  	}
+  	else if ($('#toaccount').val() == '')
+  	{
+  		
+  		$('#accounterr').html("{{ i18n.__("Error: Enter an account to send to") }}");
+  	
+  	}
+  	else if ($('#amount').val() == '')
+  	{
+
+  		$('#amounterr').html("{{ i18n.__("Error: Enter an amount") }}");
+  	
+  	}
+  	else if ($('#password').val() == '')
+  	{
+
+  		$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+  	
+  	}
+  	else
+  	{
+
+		$('#sendbutton').hide();
+		$('#loginprogress').show();
+		
+		socket.emit('sendTransaction', $('#toaccount').val(), $('#amount').val(), $('#password').val(), function(txResponse) {
+
+			if (txResponse == "OK")
+			{
+			
+				router.route('GET', '/account', () => {});
+
+			}
+			else if (txResponse == 'BADADDRESS')
+			{
+			
+				$('#accounterr').html("{{ i18n.__("Error: Invalid address.") }}");
+			
+			}
+			else if (txResponse == 'BADAMOUNT')
+			{
+			
+				$('#amounterr').html("{{ i18n.__("Error: Invalid amount.") }}");
+			
+			}
+			else if (txResponse == 'BADPASS')
+			{
+
+				$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
+
+			}
+			else
+			{
+			
+				$('#passerr').html("{{ i18n.__("Error: An unknown error occurred.") }}");
+			
+			}
+
+			$('#sendbutton').show();
+			$('#loginprogress').hide();
+		
+  		});
+  		
+  	}
+  	
+  })
+
+    
+});    
+
+</script>
+{% endblock %}

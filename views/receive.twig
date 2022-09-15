@@ -1,0 +1,44 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right">
+			<form class="accountWrapper">
+				<fieldset>
+					{{ i18n.__("Your Receiving Address") }}
+					<div class="input-group">
+					  <input id="toaccount" type="text" name="toaccount" class="form-control" autofocus readonly value="{{loadedAccount}}" />
+					  <div class="input-group-append">
+						<button data-clipboard-target="#toaccount" class="btn btn-primary nimmu-user-sibmit-button" type="button" id="copyaddress" style="height: 55px; width: 55px; border-top-left-radius:0px; border-bottom-left-radius:0px;"><i class="icofont-copy" style="cursor: pointer; font-size:20px;"></i></button>
+					  </div>
+					</div>
+
+					<div style="text-align:center;">
+						<span id="qrcode"></span>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>window.QRCode = require('qrcode');</script>
+<script>
+
+$(document).ready(function() {
+
+	QRCode.toDataURL("{{loadedAccount}}", function (err, url) {
+		if(err) return console.log("error occurred")
+		
+		$('#qrcode').html("<img style='width:300px;' src='" + url + "'>");
+	})
+
+  	new ClipboardJS('#copyaddress');
+  	
+  	$('#copyaddress').popover({trigger: 'focus', content: "{{ i18n.__("Copied") }}", delay: { "hide": 900 }});
+	
+	
+});    
+
+</script>
+{% endblock %}

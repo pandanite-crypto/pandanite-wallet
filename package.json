@@ -1,0 +1,94 @@
+{
+  "name": "Bamboo-Wallet",
+  "version": "1.0.0",
+  "description": "Electron Based Wallet for Bamboo Crypto",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "repository": "https://github.com/mrmikeo/bamboo-wallet",
+  "keywords": [
+    "Electron",
+    "Node",
+    "Template",
+    "Hackathon"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "big.js": "^6.2.1",
+    "bip39": "^3.0.4",
+    "bootstrap": "4.2.1",
+    "ed25519": "0.0.5",
+    "electron-router": "^0.5.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-twig": "^1.1.1",
+    "got": "^11.8.5",
+    "http": "0.0.1-security",
+    "i18n-2": "^0.7.3",
+    "jquery": "3.3.1",
+    "nedb-promises": "^6.1.0",
+    "popper.js": "^1.16.1",
+    "qrcode": "^1.5.1",
+    "socket.io": "^4.5.2",
+    "v8-compile-cache": "^2.3.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.66",
+    "@electron-forge/maker-deb": "^6.0.0-beta.66",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.66",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.66",
+    "@electron-forge/maker-zip": "^6.0.0-beta.66",
+    "browser-sync": "2.26.3",
+    "electron": "^6.1.12",
+    "gulp": "4.0.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+      	"icon": "./icons/mac/icon.icns"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "Bamboo_Wallet",
+            "options": {
+            	"iconUrl": "./icons/win/icon.ico",
+            	"seti[Ocpm": "./icons/win/icon.ico"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin",
+            "linux"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./icons/mac/icon.icns",
+            "background": "./static/media/dmg-background.png",
+            "format": "ULFO"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+			"options": {
+				"icon": "./icons/png/1024x1024.png"
+			}
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
+  }
+}

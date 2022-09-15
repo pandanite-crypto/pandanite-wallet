@@ -1,0 +1,153 @@
+body {
+    font-size: 14px;
+    font-family: "Karla",sans-serif;
+    color: #676b79;
+}
+
+.container {
+    min-height: calc(100vh - 80px);
+}
+
+.container2 {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 20px);
+}
+
+.user-form {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    margin: 20px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    align-self: middle;
+}
+
+.user-form2 {
+    max-width: 100%;
+    width: calc(100% - 40px);
+    display: flex;
+    flex-wrap: wrap;
+    background: #fff;
+    margin: 20px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    align-self: middle;
+}
+
+.user-form .form-control {
+    height: 55px;
+    box-shadow: none;
+    border-color: #e6e6e6;
+}
+
+.user-form2 .form-control {
+    height: 55px;
+    box-shadow: none;
+    border-color: #e6e6e6;
+}
+
+.form-control {
+    height: 60px;
+    border: 1px solid #dcdff2;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #212e55;
+}
+
+.user-form .form-group {
+    position: relative;
+    margin-bottom:30px;
+}
+
+.user-form2 .form-group {
+    position: relative;
+    margin-bottom:30px;
+}
+
+.user-form .left, .user-form .right {
+    flex-basis: 50%;
+    padding: 50px;
+}
+
+.user-form2 .left, .user-form2 .right {
+    flex-basis: 100%;
+    padding: 50px;
+}
+
+.user-form:after {
+    position: absolute;
+    content: "";
+    background: url(./media/bamboo-bmb-logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    bottom: 0;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+}
+
+.user-form .form-group label {
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    background: #fff;
+}
+
+.user-form2 .form-group label {
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    background: #fff;
+}
+
+.form-top {
+    margin-bottom: 50px;
+}
+
+.nimmu-user-sibmit-button {
+    width: 100%;
+    background: #1b236e;
+    border: 2px solid #1b236e;
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    font-size: 16px;
+}
+
+.form-bottom .or {
+    font-size: 16px;
+    text-transform: uppercase;
+    display: inline-block;
+    padding: 0 25px;
+    background: #fff;
+    color: #3b53db;
+    margin: 30px 0;
+    position: relative;
+    display: block;
+}
+
+.form-bottom .or:after, .form-bottom .or:before {
+    position: absolute;
+    content: "";
+    width: 45%;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    background: #3b53db;
+    height: 1px;
+}
+
+.form-bottom .or:before {
+    left: 0;
+}
+.form-bottom .or:after {
+    right: 0;
+}
+
+

@@ -1,0 +1,98 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right">
+			<form class="accountWrapper">
+				<fieldset>
+					<div class="form-group">
+						<label>{{ i18n.__("Send To Account") }}</label>
+						<input id="toaccount" type="text" name="toaccount" class="form-control" autofocus/>
+						<span id="accounterr" style="color: red;"></span>
+					</div>
+					<div class="form-group">
+						<label>{{ i18n.__("Amount") }}</label>
+						<input id="amount" type="number" name="amount" class="form-control" autofocus/>
+						<span id="amounterr" style="color: red;"></span>
+					</div>
+					<div class="form-group">
+						<label>{{ i18n.__("Your Encryption Password") }}</label>
+						<input id="password" type="password" name="password" class="form-control form-control-password" />
+						<span id="passerr" style="color: red;"></span>
+					</div>
+					<button id="sendbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Send") }}</button>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+
+  $('#mainfooter').hide();
+	
+  $('#send').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	if ($('#toaccount').val() == '')
+  	{
+  		
+  		$('#accounterr').html("{{ i18n.__("Error: Enter an account to send to") }}");
+  	
+  	}
+  	else if ($('#amount').val() == '')
+  	{
+
+  		$('#amounterr').html("{{ i18n.__("Error: Enter an amount") }}");
+  	
+  	}
+  	else if ($('#password').val() == '')
+  	{
+
+  		$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+  	
+  	}
+  	else
+  	{
+
+		socket.emit('sendTransaction', $('#toaccount').val(), $('#amount').val(), $('#password').val(), function(txResponse) {
+
+			if (txResponse.status == "OK")
+			{
+			
+		
+
+			}
+			else if (txResponse.status == 'BADADDRESS')
+			{
+			
+				$('#accounterr').html("{{ i18n.__("Error: Invalid address.") }}");
+			
+			}
+			else if (txResponse.status == 'BADAMOUNT')
+			{
+			
+				$('#amounterr').html("{{ i18n.__("Error: Invalid amount.") }}");
+			
+			}
+			else if (txResponse.status == 'BADPASS')
+			{
+
+				$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
+
+			}
+
+  		});
+  		
+  	}
+  	
+  })
+
+    
+});    
+
+</script>
+{% endblock %}

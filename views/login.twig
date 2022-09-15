@@ -1,0 +1,111 @@
+{% extends 'layout_nohead.twig' %}
+
+{% block body %}
+	<div class="user-form">
+		<div class="right">
+			<form class="accountWrapper">
+				<fieldset>
+					<div class="form-group">
+						<label>{{ i18n.__("Select Account") }}</label>
+						<select id="account" name="account" class="form-control" />
+						</select>
+						<span id='accounterr' style="color: red;"></span></div>
+					<div class="form-group">
+						<label>{{ i18n.__("Encryption Password") }}</label>
+						<input id="password" type="password" name="password" class="form-control form-control-password" autofocus />
+						<span id='passerr' style="color: red;"></span>
+					</div>
+					<button id="loginbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Login") }}</button>
+					<div class="progress" id="loginprogress" style="display:none; height:50px;">
+					  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%; color: #fff; text-align:center;">{{ i18n.__("Loading Account") }} ...</div>
+					</div>
+				</fieldset>
+			</form>
+			<div class="form-bottom text-center">
+				<h4 class="or">{{ i18n.__("OR") }}</h4>
+				<button id="createaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:40%; margin-right:10px;">{{ i18n.__("Create Account") }}</button>
+				<button id="restoreaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:40%; margin-left:10px;">{{ i18n.__("Restore Account") }}</button>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+
+  socket.emit('getAccountList', function(accounts) {
+  
+  	accounts.forEach(item => {
+  	
+  		$('#account').append(`<option value="${item}">${item}</option>`);
+  	
+  	});
+  
+  });
+	
+  $('#loginbutton').on('click', (e) => {
+  
+  	e.preventDefault();
+  	
+  	$('#accounterr').html("");
+  	$('#passerr').html("");
+
+  	if ($('#account').val() == '' || $('#account').val() == null)
+  	{
+  	
+  		$('#accounterr').html("{{ i18n.__("Error: Select An Account") }}");
+  	
+  	}
+  	else if ($('#password').val() == '')
+  	{
+  	
+  		$('#passerr').html("{{ i18n.__("Error: Enter Your Password") }}");
+
+  	}
+  	else
+  	{
+
+		$('#loginbutton').hide();
+		$('#loginprogress').show();
+			
+		socket.emit('login', $('#account').val(), $('#password').val(), function(status) {
+
+			if (status == 'OK')
+			{
+				router.route('GET', '/account', () => {});
+			}
+			else
+			{
+				$('#loginprogress').hide();
+				$('#loginbutton').show();
+			
+  				$('#passerr').html("{{ i18n.__("Error: Invalid Password") }}");
+			}
+
+		});
+
+	}
+  	
+  })
+
+  $('#createaccount').on('click', (e) => {
+  
+  	e.preventDefault();
+
+  	router.route('GET', '/create', () => {});
+  	
+  })
+  
+  $('#restoreaccount').on('click', (e) => {
+  
+  	e.preventDefault();
+
+  	router.route('GET', '/restore', () => {});
+  	
+  })
+    
+});    
+
+</script>
+{% endblock %}

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+
+  <title>{{ i18n.__("Bamboo Wallet") }} {{ version }}</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../vendor/grid/mermaid.min.css" rel="stylesheet">
+  <link href="../static/main.css" rel="stylesheet">
+
+    <style>
+
+		/* GridJs Overrides */
+		
+    	/* fix */
+		.gridjs-table{
+			min-width: 100%;
+		}
+		
+		.gridjs-container {
+			color: #000;
+		}
+
+		.gridjs-wrapper {
+			border-radius: 4px 4px 0 0;
+			box-shadow: unset;
+		}
+
+		th.gridjs-th {
+			padding: 3px;
+			border: 0px;
+		}
+
+		th.gridjs-th:not(.gridjs-th-sort) {
+			padding-right:15px;
+		}
+		
+		th.gridjs-th .gridjs-th-content {
+			text-align: center;
+			padding-left:10px;
+			font-weight: normal;
+			font-size: 12px;
+			padding-top: 3px;
+		}		
+		
+		td.gridjs-td {
+			border: 0px;
+			border-bottom: 1px solid #ccc;
+			padding: 6px 12px;
+		}
+
+		.gridjs-table tr:nth-child(2n+2){
+			background: #ddd;
+		}
+
+		//
+		
+	</style>
+
+
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav id="topnav" class="navbar navbar-expand-lg navbar-dark bg-dark static-top" style="position: sticky; z-index:999; top:0px; height:40px;">
+    <div style="width:100%;">
+    
+      <img src="../static/media/bamboo-bmb-logo.png" style="height:35px; display: inline; margin:0px; margin-left:5px; vertical-align: middle;">
+      <a id="gotohome" class="navbar-brand" href="javascript:void (0);" style="padding-left:20px; vertical-align: text-top;"><i class="icofont-ui-home"></i> {{ i18n.__("Home") }}</a>
+      <a id="gotosend" class="navbar-brand" href="javascript:void (0);" style="padding-left:20px; vertical-align: text-top;"><i class="icofont-swoosh-up"></i> {{ i18n.__("Send") }}</a>
+      <a id="gotoreceive" class="navbar-brand" href="javascript:void (0);" style="padding-left:20px; vertical-align: text-top;"><i class="icofont-swoosh-down"></i> {{ i18n.__("Receive") }}</a>
+
+      <a id="gotologout" class="navbar-brand" href="javascript:void (0);" style="float:right; padding-left:15px;"><i class="icofont-logout"></i></a>
+      <a id="gotosettings" class="navbar-brand" href="javascript:void (0);" style="float:right;"><i class="icofont-ui-settings"></i></a>
+
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container" style="margin:0px; padding:0px; max-width:100%; padding-left:10px; padding-right:10px;">
+
+{% block body %}{% endblock %}
+
+  </div>
+
+	<div id="mainfooter" class="nsf-bottom d-none d-sm-block" style="position: sticky; z-index:99999; bottom:0px; background-color: #000; height:19px; width:100%;">
+		<div class="nsf-center" style="display: flex; flex-direction: row; margin: auto; font-size:13px; max-width:100%;">
+
+			<div style="flex:1; width:50%; display: inline-block; text-align:left; white-space: nowrap; overflow: visible; margin-left:10px;">
+				<span style="margin-right:20px;" id="connectionStatus">
+							<svg style="margin-top:-3px;" width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect y="9.667" width="1.67" height="2.5" fill="#CCC"></rect>
+								<rect x="4.44446" y="5.667" width="1.66667" height="6.67" fill="#CCC"></rect>
+								<rect x="8.88892" y="3" width="1.66667" height="10.83" fill="#CCC"></rect>
+								<rect x="13.3333" width="1.66667" height="15" fill="#CCC"></rect>
+							</svg>
+				</span>
+			</div>
+			
+			
+			<div style="flex:1;  width:50%; display: inline-block; text-align:right; white-space: nowrap; overflow: visible; margin-right:10px; color: #fff;">
+				{{ i18n.__("BlockHeight") }}: <span id="blockChainHeight">0</span>			
+			</div>
+
+		</div>
+	</div>
+	
+  <!-- Bootstrap core JavaScript -->
+  <script>window.$ = window.jQuery = require('jquery');</script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../vendor/socket.io/socket.io.min.js"></script>
+  <script src="../vendor/grid/gridjs.umd.js"></script>
+  <script src="../vendor/clipboard.min.js"></script>
+
+  <script>
+    var socket = io('http://localhost:3001');
+    socket.on('connect', function(){
+    	console.log('connnected');
+    });
+    socket.on('event', function(data){});
+    socket.on('disconnect', function(){});
+  </script> 
+  <script>
+    //load in node libraries
+    require('../renderer.js')
+  </script>
+  <script>
+  
+  	$('#gotohome').on('click', function() {
+  	
+  		router.route('GET', '/account', () => {});
+  	
+  	});
+
+  	$('#gotosend').on('click', function() {
+  	
+  		router.route('GET', '/send', () => {});
+  	
+  	});
+  	
+  	$('#gotoreceive').on('click', function() {
+  	
+  		router.route('GET', '/receive', () => {});
+  	
+  	});
+
+  	$('#gotomine').on('click', function() {
+  	
+  		router.route('GET', '/mine', () => {});
+  	
+  	});
+
+  	$('#gotosettings').on('click', function() {
+  	
+  		router.route('GET', '/settings', () => {});
+  	
+  	});
+  	
+  	$('#gotologout').on('click', function() {
+  	
+  		router.route('GET', '/logout', () => {});
+  	
+  	});
+  	
+  </script>
+  {% block javascripts %}{% endblock %}
+  
+</body>
+
+</html>

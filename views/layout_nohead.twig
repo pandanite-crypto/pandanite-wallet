@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+
+
+  <title>{{ i18n.__("Bamboo Wallet") }} {{ version }}</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../static/main.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Page Content -->
+  <div class="container container2">
+
+{% block body %}{% endblock %}
+
+  </div>
+	
+  <!-- Bootstrap core JavaScript -->
+  <script>window.$ = window.jQuery = require('jquery');</script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../vendor/socket.io/socket.io.min.js"></script>
+  <script>
+    var socket = io('http://localhost:3001');
+    socket.on('connect', function(){
+    	console.log('connnected');
+    });
+    socket.on('event', function(data){});
+    socket.on('disconnect', function(){});
+  </script> 
+  
+  <script>
+    //load in node libraries
+    require('../renderer.js')
+  </script>
+
+  {% block javascripts %}{% endblock %}
+  
+</body>
+
+</html>
