@@ -15,6 +15,7 @@ const got 					= require('got');
 const Datastore 			= require('nedb-promises');
 const Big					= require('big.js');
 const path					= require('path');
+const portfinder 			= require('portfinder');
 
 var db = {};
 
@@ -87,25 +88,34 @@ var mainSocket;
 var loadedAccount = '';
 var accountTransactions = [];
 var accountBalance = Big(0).toFixed(4);
+var serverPort;
 
 const server = require('http').createServer(app);
 
 const io = require('socket.io')(server);
 
-server.listen(3001);
-
 let mainWindow
 
-//console.log( i18n.__("Hello!") );
+portfinder.getPort(function (err, port) {
 
-twig.view = {
-    i18n: i18n,
-    version: bambooAppVersion,
-    localesObject: JSON.stringify(localesObject),
-    peers: JSON.stringify(peers),
-    selectedPeer: selectedPeer
-}
-  
+	if (err) app.quit()
+	
+	serverPort = port;
+	server.listen(serverPort);
+
+	console.log('Running on port: ' + serverPort);
+	
+	twig.view = {
+		i18n: i18n,
+		version: bambooAppVersion,
+		localesObject: JSON.stringify(localesObject),
+		peers: JSON.stringify(peers),
+		selectedPeer: selectedPeer,
+		serverPort: serverPort
+	}
+
+});
+
 function createWindow () {
 
   mainWindow = new BrowserWindow({
@@ -684,7 +694,8 @@ io.on('connection', (socket) => {
 							accountBalance: accountBalance,
 							localesObject: JSON.stringify(localesObject),
 			   				peers: JSON.stringify(peers),
-    						selectedPeer: selectedPeer
+    						selectedPeer: selectedPeer,
+    						serverPort: serverPort
 						}
 						
 						accountTransactions = [];

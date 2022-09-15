@@ -33,6 +33,7 @@
     "jquery": "3.3.1",
     "nedb-promises": "^6.1.0",
     "popper.js": "^1.16.1",
+    "portfinder": "^1.0.32",
     "qrcode": "^1.5.1",
     "socket.io": "^4.5.2",
     "v8-compile-cache": "^2.3.0"
@@ -51,7 +52,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-      	"icon": "./icons/mac/icon.icns"
+        "icon": "./icons/mac/icon.icns"
       },
       "makers": [
         {
@@ -59,8 +60,8 @@
           "config": {
             "name": "Bamboo_Wallet",
             "options": {
-            	"iconUrl": "./icons/win/icon.ico",
-            	"setupIcon": "./icons/win/icon.ico"
+              "iconUrl": "./icons/win/icon.ico",
+              "setupIcon": "./icons/win/icon.ico"
             }
           }
         },
@@ -75,16 +76,16 @@
           "name": "@electron-forge/maker-dmg",
           "config": {
             "icon": "./icons/mac/icon.icns",
-            "background": "./static/media/dmg-background.png",
+            "background": "./static/media/dmg-background.jpg",
             "format": "ULFO"
           }
         },
         {
           "name": "@electron-forge/maker-deb",
           "config": {
-			"options": {
-				"icon": "./icons/png/1024x1024.png"
-			}
+            "options": {
+              "icon": "./icons/png/1024x1024.png"
+            }
           }
         },
         {
