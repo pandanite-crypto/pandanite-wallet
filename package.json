@@ -1,6 +1,6 @@
 {
   "name": "Bamboo-Wallet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Electron Based Wallet for Bamboo Crypto",
   "main": "main.js",
   "scripts": {
