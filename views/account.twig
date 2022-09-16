@@ -82,6 +82,14 @@ $(document).ready(function() {
 				  }
 				}
 			}
+		},
+		{
+			id: 'from',
+			hidden: true
+		},
+		{
+			id: 'to',
+			hidden: true
 		}
 	  ],
       search: {
@@ -115,7 +123,9 @@ $(document).ready(function() {
 					(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
 					txinfo.to == loadedAddress ? 'Receive' : 'Send',
 					gridjs.html(`<span class='transactioninfo' data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>`),
-					Big(txinfo.amount).div(10**4).toFixed(4)
+					Big(txinfo.amount).div(10**4).toFixed(4),
+					txinfo.from,
+					txinfo.to
 				  ])
 				);
 
