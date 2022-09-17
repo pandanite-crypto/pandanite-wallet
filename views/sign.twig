@@ -1,9 +1,7 @@
-{% extends 'layout.twig' %}
 
-{% block body %}
 	<div class="user-form2" id="userform2">
 		<div class="right">
-			<form class="accountWrapper">
+			<form class="accountWrapper" onsubmit="event.preventDefault();">
 				<fieldset>
 					
 					<div class="form-group">
@@ -29,67 +27,3 @@
 			</form>
 		</div>
 	</div>
-{% endblock %}
-{% block javascripts %}
-<script>
-
-$(document).ready(function() {
-
-	$('#signbutton').on('click', (e) => {
-  
-  		e.preventDefault();
-
-		if ($('#password').val() == '')
-		{
-
-			$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
-	
-		}
-		else
-		{
-
-			$('#signbutton').hide();
-			$('#signprogress').show();
-		
-			socket.emit('signMessage', $('#message').val(), $('#password').val(), function(signResponse) {
-
-				$('#signbutton').show();
-				$('#signprogress').hide();
-			
-				if (signResponse.status == "OK")
-				{
-				
-					$('#publickey').html(`<label>{{ i18n.__("Public Key (For validating)") }}</label>
-										<textarea class="form-control" style="width:100%; height:80px;">` + signResponse.publicKey + `</textarea>`);
-
-					$('#signature').html(`<label>{{ i18n.__("Signature") }}</label>
-										<textarea class="form-control" style="width:100%; height:80px;">` + signResponse.signature + `</textarea>`);
-								
-					$('#vmessage').html(`{{ i18n.__("Give the person whom you want to validate this message 3 items:  The message, your public key, and the signature.") }}`);		
-
-
-				}
-				else if (signResponse.status == 'BADPASS')
-				{
-
-					$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
-
-				}
-				else
-				{
-			
-					$('#passerr').html("{{ i18n.__("Error: An unknown error occurred.") }}");
-			
-				}
-
-			});
-			
-		}
-
-  		
-  	});
-
-});    
-
-</script>
-{% endblock %}

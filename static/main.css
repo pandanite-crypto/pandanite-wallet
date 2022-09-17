@@ -185,4 +185,35 @@ body {
     right: 0;
 }
 
+.navbar-brand {
+
+	color: #ccc;
+	border-bottom:0px;
+
+}
+
+.navbar-brand path {
+
+	fill: #ccc;
+
+}
+
+.navbar-brand:hover path {
+
+	fill: #fff;
+
+}
+
+.navbar-brand.active {
+
+	color: #fff; 
+	border-bottom:5px solid #F9D951;
+
+}
+
+.navbar-brand.active path {
+
+	fill: #F9D951; 
+
+}
 

@@ -135,7 +135,7 @@ function loadSettings() {
 				peers: JSON.stringify(peers),
 				selectedPeer: selectedPeer,
 				serverPort: serverPort,
-				latestVersion: latestGitVersion
+				latestVersion: latestGitVersion,
 			};
 			
 			createWindow();
@@ -197,10 +197,11 @@ function createWindow () {
 	
   });
   
+  /*
   router.get('/account', ( req, res ) => {
 
 	twig.view.currentRoute = 'account';
-    mainWindow.loadURL(`file://${__dirname}/views/account.twig`);
+    mainWindow.loadURL(`file://${__dirname}/views/main.twig`);
 	
   });
 
@@ -236,6 +237,14 @@ function createWindow () {
 
 	twig.view.currentRoute = 'settings';
     mainWindow.loadURL(`file://${__dirname}/views/settings.twig`);
+	
+  });
+  */
+
+  router.get('/main', ( req, res ) => {
+
+	twig.view.currentRoute = 'main';
+    mainWindow.loadURL(`file://${__dirname}/views/main.twig`);
 	
   });
   
@@ -438,7 +447,7 @@ io.on('connection', (socket) => {
 				peers: JSON.stringify(peers),
 				selectedPeer: selectedPeer,
 				serverPort: serverPort,
-				latestVersion: latestGitVersion
+				latestVersion: latestGitVersion,
 			}
 				
 			callback(newAccount);
@@ -536,7 +545,7 @@ io.on('connection', (socket) => {
 					peers: JSON.stringify(peers),
 					selectedPeer: selectedPeer,
 					serverPort: serverPort,
-					latestVersion: latestGitVersion	
+					latestVersion: latestGitVersion,
 				}
 				
 				callback(newAccount);
@@ -603,7 +612,7 @@ io.on('connection', (socket) => {
 					peers: JSON.stringify(peers),
 					selectedPeer: selectedPeer,
 					serverPort: serverPort,
-					latestVersion: latestGitVersion
+					latestVersion: latestGitVersion,
 				}
 				
 				callback(newAccount);
@@ -909,7 +918,7 @@ io.on('connection', (socket) => {
     						selectedPeer: selectedPeer,
     						serverPort: serverPort,
     						upgradeAvailable: upgradeAvailable,
-    						latestVersion: latestGitVersion
+    						latestVersion: latestGitVersion,
 						}
 						
 						accountTransactions = [];

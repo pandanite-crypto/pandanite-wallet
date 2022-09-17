@@ -107,14 +107,14 @@
 		<div style="width:100%;">
 	
 		  <img src="../static/media/bamboo-bmb-logo.png" style="height:35px; display: inline; margin:2px; margin-left:5px; vertical-align: middle;">
-		  <a id="gotohome" class="navbar-brand" href="javascript:void (0);" style="margin-left:30px; vertical-align: middle; color: {{ currentRoute=='account'?'#fff; border-bottom:5px solid #F9D951;':'#ccc' }}"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="{{ currentRoute=='account'?'#fff':'#ccc' }}" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg> {{ i18n.__("Home") }}</a>
-		  <a id="gotosend" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle; color: {{ currentRoute=='send'?'#fff; border-bottom:5px solid #F9D951;':'#ccc' }}"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="{{ currentRoute=='send'?'#fff':'#ccc' }}" d="M318 177.5c3.8-8.8 2-19-4.6-26l-136-144C172.9 2.7 166.6 0 160 0s-12.9 2.7-17.4 7.5l-136 144c-6.6 7-8.4 17.2-4.6 26S14.4 192 24 192h88l0 288c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32l0-288h88c9.6 0 18.2-5.7 22-14.5z"/></svg> {{ i18n.__("Send") }}</a>
-		  <a id="gotoreceive" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle; color: {{ currentRoute=='receive'?'#fff; border-bottom:5px solid #F9D951;':'#ccc' }}"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="{{ currentRoute=='receive'?'#fff':'#ccc' }}" d="M318 334.5c3.8 8.8 2 19-4.6 26l-136 144c-4.5 4.8-10.8 7.5-17.4 7.5s-12.9-2.7-17.4-7.5l-136-144c-6.6-7-8.4-17.2-4.6-26S14.4 320 24 320h88l0-288c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32l0 288h88c9.6 0 18.2 5.7 22 14.5z"/></svg> {{ i18n.__("Receive") }}</a>
+		  <a id="gotohome" class="navbar-brand active" href="javascript:void (0);" style="margin-left:30px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#ccc" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg> {{ i18n.__("Home") }}</a>
+		  <a id="gotosend" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="#ccc" d="M318 177.5c3.8-8.8 2-19-4.6-26l-136-144C172.9 2.7 166.6 0 160 0s-12.9 2.7-17.4 7.5l-136 144c-6.6 7-8.4 17.2-4.6 26S14.4 192 24 192h88l0 288c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32l0-288h88c9.6 0 18.2-5.7 22-14.5z"/></svg> {{ i18n.__("Send") }}</a>
+		  <a id="gotoreceive" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="#ccc" d="M318 334.5c3.8 8.8 2 19-4.6 26l-136 144c-4.5 4.8-10.8 7.5-17.4 7.5s-12.9-2.7-17.4-7.5l-136-144c-6.6-7-8.4-17.2-4.6-26S14.4 320 24 320h88l0-288c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32l0 288h88c9.6 0 18.2 5.7 22 14.5z"/></svg> {{ i18n.__("Receive") }}</a>
 
-		  <a id="gotosign" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle; color: {{ currentRoute=='sign'?'#fff; border-bottom:5px solid #F9D951;':'#ccc' }}"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="{{ currentRoute=='sign'?'#fff':'#ccc' }}"d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg> {{ i18n.__("Sign") }}</a>
-		  <a id="gotoverify" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle; color: {{ currentRoute=='verify'?'#fff; border-bottom:5px solid #F9D951;':'#ccc' }}"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="{{ currentRoute=='verify'?'#fff':'#ccc' }}" d="M211 7.3C205 1 196-1.4 187.6 .8s-14.9 8.9-17.1 17.3L154.7 80.6l-62-17.5c-8.4-2.4-17.4 0-23.5 6.1s-8.5 15.1-6.1 23.5l17.5 62L18.1 170.6c-8.4 2.1-15 8.7-17.3 17.1S1 205 7.3 211l46.2 45L7.3 301C1 307-1.4 316 .8 324.4s8.9 14.9 17.3 17.1l62.5 15.8-17.5 62c-2.4 8.4 0 17.4 6.1 23.5s15.1 8.5 23.5 6.1l62-17.5 15.8 62.5c2.1 8.4 8.7 15 17.1 17.3s17.3-.2 23.4-6.4l45-46.2 45 46.2c6.1 6.2 15 8.7 23.4 6.4s14.9-8.9 17.1-17.3l15.8-62.5 62 17.5c8.4 2.4 17.4 0 23.5-6.1s8.5-15.1 6.1-23.5l-17.5-62 62.5-15.8c8.4-2.1 15-8.7 17.3-17.1s-.2-17.3-6.4-23.4l-46.2-45 46.2-45c6.2-6.1 8.7-15 6.4-23.4s-8.9-14.9-17.3-17.1l-62.5-15.8 17.5-62c2.4-8.4 0-17.4-6.1-23.5s-15.1-8.5-23.5-6.1l-62 17.5L341.4 18.1c-2.1-8.4-8.7-15-17.1-17.3S307 1 301 7.3L256 53.5 211 7.3z"/></svg> {{ i18n.__("Verify") }}</a>
+		  <a id="gotosign" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg> {{ i18n.__("Sign") }}</a>
+		  <a id="gotoverify" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M211 7.3C205 1 196-1.4 187.6 .8s-14.9 8.9-17.1 17.3L154.7 80.6l-62-17.5c-8.4-2.4-17.4 0-23.5 6.1s-8.5 15.1-6.1 23.5l17.5 62L18.1 170.6c-8.4 2.1-15 8.7-17.3 17.1S1 205 7.3 211l46.2 45L7.3 301C1 307-1.4 316 .8 324.4s8.9 14.9 17.3 17.1l62.5 15.8-17.5 62c-2.4 8.4 0 17.4 6.1 23.5s15.1 8.5 23.5 6.1l62-17.5 15.8 62.5c2.1 8.4 8.7 15 17.1 17.3s17.3-.2 23.4-6.4l45-46.2 45 46.2c6.1 6.2 15 8.7 23.4 6.4s14.9-8.9 17.1-17.3l15.8-62.5 62 17.5c8.4 2.4 17.4 0 23.5-6.1s8.5-15.1 6.1-23.5l-17.5-62 62.5-15.8c8.4-2.1 15-8.7 17.3-17.1s-.2-17.3-6.4-23.4l-46.2-45 46.2-45c6.2-6.1 8.7-15 6.4-23.4s-8.9-14.9-17.3-17.1l-62.5-15.8 17.5-62c2.4-8.4 0-17.4-6.1-23.5s-15.1-8.5-23.5-6.1l-62 17.5L341.4 18.1c-2.1-8.4-8.7-15-17.1-17.3S307 1 301 7.3L256 53.5 211 7.3z"/></svg> {{ i18n.__("Verify") }}</a>
 
-		  <a id="gotosettings" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle; color: {{ currentRoute=='settings'?'#fff; border-bottom:5px solid #F9D951;':'#ccc' }}"><span class="position-relative"><svg style="width:20px; height:20px; margin-top:-3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="{{ currentRoute=='settings'?'#fff':'#ccc' }}" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336c44.2 0 80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80s35.8 80 80 80z"/></svg>{% if (version != latestVersion) %}<span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle" style="padding: .2rem!important;"></span>{% endif %}</span> {{ i18n.__("Settings") }}</a>
+		  <a id="gotosettings" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><span class="position-relative"><svg style="width:20px; height:20px; margin-top:-3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336c44.2 0 80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80s35.8 80 80 80z"/></svg>{% if (version != latestVersion) %}<span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle" style="padding: .2rem!important;"></span>{% endif %}</span> {{ i18n.__("Settings") }}</a>
 
 		  <a id="gotologout" class="navbar-brand" href="javascript:void (0);" style="float:right;"><svg style="width:20px; height:20px; margin-top:-3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M352 96l64 0c17.7 0 32 14.3 32 32l0 256c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c53 0 96-43 96-96l0-256c0-53-43-96-96-96l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-9.4 182.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L242.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"/></svg></a>
 
@@ -123,7 +123,7 @@
 	  </nav>
 
 	  <!-- Page Content -->
-	  <div class="container" style="margin:0px; padding:0px; max-width:100%; padding-left:10px; padding-right:10px;">
+	  <div id="maincontent" class="container" style="margin:0px; padding:0px; max-width:100%; padding-left:10px; padding-right:10px;">
 
 {% block body %}{% endblock %}
 
@@ -173,43 +173,113 @@
   <script>
     //load in node libraries
     require('../renderer.js')
+    window.QRCode = require('qrcode');
+	window.Big = require('big.js');
   </script>
   <script>
   
+  	var myTemplate, normalContent, clonedTemplate;
+  
   	$('#gotohome').on('click', function() {
   	
-  		router.route('GET', '/account', () => {});
+  		//router.route('GET', '/account', () => {});
+  		
+  	  $('.navbar-brand').removeClass('active');
+  	  $(this).addClass('active');
+  		
+      myTemplate = document.getElementById('templateAccountPage');
+      normalContent = document.getElementById('maincontent');
+      clonedTemplate = myTemplate.content.cloneNode(true);
+      normalContent.innerHTML = "";
+      normalContent.appendChild(clonedTemplate);
+      
+      loadAccountPage();
   	
   	});
 
   	$('#gotosend').on('click', function() {
   	
-  		router.route('GET', '/send', () => {});
-  	
+  		//router.route('GET', '/send', () => {});
+
+  	  $('.navbar-brand').removeClass('active');
+  	  $(this).addClass('active');
+  	  
+      myTemplate = document.getElementById('templateSendPage');
+      normalContent = document.getElementById('maincontent');
+      clonedTemplate = myTemplate.content.cloneNode(true);
+      normalContent.innerHTML = "";
+      normalContent.appendChild(clonedTemplate);
+      
+      loadSendPage();
+      
   	});
   	
   	$('#gotoreceive').on('click', function() {
   	
-  		router.route('GET', '/receive', () => {});
-  	
+  		//router.route('GET', '/receive', () => {});
+  		
+  	  $('.navbar-brand').removeClass('active');
+  	  $(this).addClass('active');
+  	  
+      myTemplate = document.getElementById('templateReceivePage');
+      normalContent = document.getElementById('maincontent');
+      clonedTemplate = myTemplate.content.cloneNode(true);
+      normalContent.innerHTML = "";
+      normalContent.appendChild(clonedTemplate);
+      
+      loadReceivePage();
+      
   	});
 
   	$('#gotosign').on('click', function() {
   	
-  		router.route('GET', '/sign', () => {});
-  	
+  		//router.route('GET', '/sign', () => {});
+  		
+  	  $('.navbar-brand').removeClass('active');
+  	  $(this).addClass('active');
+  	  
+      myTemplate = document.getElementById('templateSignPage');
+      normalContent = document.getElementById('maincontent');
+      clonedTemplate = myTemplate.content.cloneNode(true);
+      normalContent.innerHTML = "";
+      normalContent.appendChild(clonedTemplate);
+      
+      loadSignPage();
+      
   	});
 
   	$('#gotoverify').on('click', function() {
   	
-  		router.route('GET', '/verify', () => {});
-  	
+  		//router.route('GET', '/verify', () => {});
+
+  	  $('.navbar-brand').removeClass('active');
+  	  $(this).addClass('active');
+  	  
+      myTemplate = document.getElementById('templateVerifyPage');
+      normalContent = document.getElementById('maincontent');
+      clonedTemplate = myTemplate.content.cloneNode(true);
+      normalContent.innerHTML = "";
+      normalContent.appendChild(clonedTemplate);
+      
+      loadVerifyPage();
+      
   	});
   	
   	$('#gotosettings').on('click', function() {
   	
-  		router.route('GET', '/settings', () => {});
-  	
+  		//router.route('GET', '/settings', () => {});
+
+  	  $('.navbar-brand').removeClass('active');
+  	  $(this).addClass('active');
+  	  
+      myTemplate = document.getElementById('templateSettingsPage');
+      normalContent = document.getElementById('maincontent');
+      clonedTemplate = myTemplate.content.cloneNode(true);
+      normalContent.innerHTML = "";
+      normalContent.appendChild(clonedTemplate);
+      
+      loadSettingsPage();
+      
   	});
   	
   	$('#gotologout').on('click', function() {
@@ -217,9 +287,836 @@
   		router.route('GET', '/logout', () => {});
   	
   	});
+
+  	$('#gotomainscreen').on('click', function() {
+  	
+  		router.route('GET', '/main', () => {});
+  	
+  	});
+
+	$(document).ready(function() {
+	
+	
+	});
+	
+	var grid;
+	
+	function loadAccountPage()
+	{
+
+		var loadedAddress = "{{loadedAccount}}";
+
+		new ClipboardJS('#copyaddress');
+	
+		$('#copyaddress').popover({trigger: 'focus', content: "{{ i18n.__("Copied") }}", delay: { "hide": 900 }});
+	
+		function forceRefresh() {
+
+			$('#forcerefrsh').addClass('fa-spin');
+		
+			socket.emit('forcerefresh');
+	
+		}
+	
+		grid = new gridjs.Grid({
+		  columns: [
+			{
+				id: 'date',
+				name: '{{ i18n.__("Date") }}'
+			},
+			{
+				id: 'type',
+				name: '{{ i18n.__("Type") }}',
+				formatter: (cell) => {
+					return gridjs.html(cell == 'Send' ? '<span style="color:red;">{{ i18n.__("Send") }}</span>' : '<span style="color:green;">{{ i18n.__("Receive") }}</span>');
+				},
+			},
+			{
+				id: 'txid',
+				name: '{{ i18n.__("TransactionId") }}'
+			},
+			{
+				id: 'amount',
+				name: '{{ i18n.__("Amount") }}',
+				formatter: (cell) => {
+					return gridjs.html("<div style='text-align:right;'>" + cell + " BMB</div>");
+				},
+				sort: {
+					compare: (a, b) => {
+					  const code = (x) => parseFloat(x.replace(" BMB", ''));
+
+					  if (code(a) > code(b)) {
+						return 1;
+					  } else if (code(b) > code(a)) {
+						return -1;
+					  } else {
+						return 0;
+					  }
+					}
+				}
+			},
+			{
+				id: 'from',
+				hidden: true
+			},
+			{
+				id: 'to',
+				hidden: true
+			}
+		  ],
+		  search: {
+			enabled: true
+		  },
+		  language: {
+			'search': {
+			  'placeholder': '🔍 search...'
+			},
+		  },
+		  style: { 
+			table: { 
+			  'white-space': 'nowrap'
+			}
+		  },
+		  sort: {
+			multiColumn: true
+		  },
+		  pagination: {
+			enabled: false
+		  },
+		  fixedHeader: true,
+		  height: 'calc(100vh - 152px)',
+		  data: () => {
+			return new Promise(resolve => {
+		
+				socket.emit('transactionList', function(data) {
+
+					resolve(
+					  data.map(txinfo => [
+						(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
+						txinfo.to == loadedAddress ? 'Receive' : 'Send',
+						gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
+						Big(txinfo.amount).div(10**4).toFixed(4),
+						txinfo.from,
+						txinfo.to
+					  ])
+					);
+
+				});
+		
+			});
+		  }
+		}).render(document.getElementById("transactiongrid"));
+
+		class RightTopSpanPlugin extends gridjs.BaseComponent {
+
+			render() {
+  
+				return gridjs.h('span', {
+									style: 'float:right; font-size:22px; padding: 5px; padding-right:0px;',
+									id: 'accountValue',
+									}, '');
+
+			}
+		
+		}
+
+		grid.plugin.add({
+		  id: 'accountValue',
+		  component: RightTopSpanPlugin,
+		  position: gridjs.PluginPosition.Header,
+		  order: 1
+		});
+
+
+		grid.on('ready', function() {
+		
+			infoButtons();
+	 
+		});
+
+		function infoButtons() {
+	
+			$('.transactioninfo').off('click');
+			$('.transactioninfo').on('click', function() {
+	
+				let thistxid = $(this).data('txid');
+				let thisfrom = $(this).data('from');
+				let thisto = $(this).data('to');
+				let thispending = $(this).data('pending');
+
+				let thisamount = '0.0000';
+			
+				try {
+					thisamount = Big($(this).data('amount')).div(10**4).toFixed(4);
+				} catch (e) {
+				
+				}	
+			
+				let thisfee = '0.0000';
+			
+				try {
+					thisfee = Big($(this).data('fee')).div(10**4).toFixed(4);
+				} catch (e) {
+				
+				}
+			
+				let thistimestamp = $(this).data('timestamp');
+
+				var htmlcode = `<div style="color: #000;">
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Transaction ID") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-txid" style="font-weight: bold; border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+						<div id="copy-input-txid" class="nicescrollable" style="padding:2px;">` + thistxid + `</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("From Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr" style="font-weight: bold;  border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+						<div id="copy-input-addr" class="nicescrollable" style="padding:2px;">` + thisfrom + `</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("To Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr2" style="font-weight: bold;  border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+						<div id="copy-input-addr2" class="nicescrollable" style="padding:2px;">` + thisto + `</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Amount") }}</div>
+						<div style="padding:2px;" class="nicescrollable">` + thisamount + `</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Fee") }}</div>
+						<div style="padding:2px;" class="nicescrollable">` + thisfee + `</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Timestamp") }}</div>
+						<div style="padding:2px;" class="nicescrollable">` + (new Date(parseInt(thistimestamp))).toLocaleString() + `</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Status") }}</div>
+						<div style="padding:2px;" class="nicescrollable">` + (thispending==true?'{{ i18n.__("Pending") }}':'{{ i18n.__("Confirmed") }}') + `</div>
+						</div>`;
+
+				var frag = document.createRange().createContextualFragment('<div style="text-align:left;">' + htmlcode + '</div>');
+  
+				let wrapper = document.createElement('div');
+				wrapper.appendChild(frag);
+
+				const el = wrapper.firstChild;
+  
+				const swaltext = "{{ i18n.__("Transaction Details") }}";
+		  
+				swal({
+				  text: swaltext,
+				  content: el,
+				  buttons: {
+					confirm: "{{ i18n.__("OK") }}",
+				  },
+				});
+				
+				$(".nicescrollable").niceScroll();
+
+				new ClipboardJS('.copy-button');
+	
+				$('.copy-button').popover({trigger: 'focus', content: "{{ i18n.__("Copied") }}", delay: { "hide": 900 }});
+
+			});
+	
+		}
+	
+		socket.emit('accountInfo', function(accountInfo) {
+	
+			$('#accountaddress').html(accountInfo.address);
+		
+			loadedAddress = accountInfo.address;
+		
+			let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+		
+			try {
+				formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+			} catch (e) {
+		
+			}
+		
+			$('#accountValue').html(formattedBalance);
+		
+			$('#forcerefrsh').off('click');
+			$('#forcerefrsh').on('click', function() {
+				forceRefresh();
+			});
+
+		});
+
+		socket.on('accountUpdate', function () { 
+		
+			grid.updateConfig({
+			  data: () => {
+				return new Promise(resolve => {
+		
+					socket.emit('transactionList', function(data) {
+					
+						resolve(
+						  data.map(txinfo => [
+							(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
+							txinfo.to == loadedAddress ? 'Receive' : 'Send',
+							gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
+							Big(txinfo.amount).div(10**4).toFixed(4)
+						  ])
+						);
+
+					});
+		
+				});
+			  },
+			  plugins: [
+				{
+				  id: 'accountValue',
+				  component: RightTopSpanPlugin,
+				  position: gridjs.PluginPosition.Header,
+				  order: 1
+				}
+			  ]
+			}).forceRender();
+
+		
+			socket.emit('accountInfo', function(accountInfo) {
+	
+				$('#accountaddress').html(accountInfo.address);
+		
+				loadedAddress = accountInfo.address;
+		
+				let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+		
+				try {
+					formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+				} catch (e) {
+		
+				}
+		
+				$('#accountValue').html(formattedBalance);
+
+				$('#forcerefrsh').off('click');
+				$('#forcerefrsh').on('click', function() {
+					forceRefresh();
+				});
+		
+			});
+		
+		});
+
+	} 
+	
+  	function loadSendPage()
+  	{
+  	
+	  $('#amount').off('change');
+	  $('#amount').on('change', function() {
+  
+		try {
+	
+			$('#amount').val(Big($('#amount').val()).toFixed(4));
+		
+		} catch (e) {
+	
+			$('#amount').val('0.0000');
+	
+		}
+  
+	  });  
+
+	  $('#sendbutton').off('click');
+	  $('#sendbutton').on('click', (e) => {
+  
+		e.preventDefault();
+	
+		let valueErr = false;
+	
+		let testValue;
+		
+		try {
+	
+			testValue = Big($('#amount').val());
+
+		} catch (e) {
+	
+			valueErr = true;
+	
+		}
+	
+		if (valueErr)
+		{
+
+			$('#amounterr').html("{{ i18n.__("Error: Enter a valid amount") }}");
+	
+		}
+		else if (Big(testValue).minus(0.0001).gt({{accountBalance}}))
+		{
+
+			$('#amounterr').html("{{ i18n.__("Error: Value exceeds account balance") }}");
+	
+		}
+		else if ($('#toaccount').val() == '')
+		{
+		
+			$('#accounterr').html("{{ i18n.__("Error: Enter an account to send to") }}");
+	
+		}
+		else if ($('#amount').val() == '')
+		{
+
+			$('#amounterr').html("{{ i18n.__("Error: Enter an amount") }}");
+	
+		}
+		else if ($('#password').val() == '')
+		{
+
+			$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+	
+		}
+		else
+		{
+
+			$('#sendbutton').hide();
+			$('#loginprogress').show();
+		
+			socket.emit('sendTransaction', $('#toaccount').val(), $('#amount').val(), $('#password').val(), function(txResponse) {
+
+				if (txResponse == "OK")
+				{
+			
+				  $('.navbar-brand').removeClass('active');
+				  $('#gotohome').addClass('active');
+		
+				  myTemplate = document.getElementById('templateAccountPage');
+				  normalContent = document.getElementById('maincontent');
+				  clonedTemplate = myTemplate.content.cloneNode(true);
+				  normalContent.innerHTML = "";
+				  normalContent.appendChild(clonedTemplate);
+	  
+				  loadAccountPage();
+
+				}
+				else if (txResponse == 'BADADDRESS')
+				{
+			
+					$('#accounterr').html("{{ i18n.__("Error: Invalid address.") }}");
+			
+				}
+				else if (txResponse == 'BADAMOUNT')
+				{
+			
+					$('#amounterr').html("{{ i18n.__("Error: Invalid amount.") }}");
+			
+				}
+				else if (txResponse == 'BADPASS')
+				{
+
+					$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
+
+				}
+				else
+				{
+			
+					$('#passerr').html("{{ i18n.__("Error: An unknown error occurred.") }}");
+			
+				}
+
+				$('#sendbutton').show();
+				$('#loginprogress').hide();
+		
+			});
+		
+		}
+	
+	  })
+
+  	
+  	}
+  	
+  	
+  	function loadReceivePage() {
+
+		QRCode.toDataURL("{{loadedAccount}}", function (err, url) {
+			if(err) return console.log("error occurred")
+		
+			$('#qrcode').html("<img style='width:300px;' src='" + url + "'>");
+		})
+
+		new ClipboardJS('#copyaddress2');
+	
+		$('#copyaddress2').popover({trigger: 'focus', content: "{{ i18n.__("Copied") }}", delay: { "hide": 900 }});
+
+  	}
+  	
+  	
+  	function loadSignPage() {
+  	
+  		$('#signbutton').off('click');
+		$('#signbutton').on('click', (e) => {
+  
+			e.preventDefault();
+
+			if ($('#password').val() == '')
+			{
+
+				$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+	
+			}
+			else
+			{
+
+				$('#signbutton').hide();
+				$('#signprogress').show();
+		
+				socket.emit('signMessage', $('#message').val(), $('#password').val(), function(signResponse) {
+
+					$('#signbutton').show();
+					$('#signprogress').hide();
+			
+					if (signResponse.status == "OK")
+					{
+				
+						$('#publickey').html(`<label>{{ i18n.__("Public Key (For validating)") }}</label>
+											<textarea class="form-control" style="width:100%; height:80px;">` + signResponse.publicKey + `</textarea>`);
+
+						$('#signature').html(`<label>{{ i18n.__("Signature") }}</label>
+											<textarea class="form-control" style="width:100%; height:80px;">` + signResponse.signature + `</textarea>`);
+								
+						$('#vmessage').html(`{{ i18n.__("Give the person whom you want to validate this message 3 items:  The message, your public key, and the signature.") }}`);		
+
+
+					}
+					else if (signResponse.status == 'BADPASS')
+					{
+
+						$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
+
+					}
+					else
+					{
+			
+						$('#passerr').html("{{ i18n.__("Error: An unknown error occurred.") }}");
+			
+					}
+
+				});
+			
+			}
+
+		
+		});
+  	
+  	}
+  	
+  	function loadVerifyPage() {
+  	
+  		$('#validatebutton').off('click');
+		$('#validatebutton').on('click', (e) => {
+  
+			e.preventDefault();
+
+			if ($('#signature').val() == '')
+			{
+
+				$('#signatureerr').html("{{ i18n.__("Error: Enter the signature") }}");
+	
+			}
+			else if ($('#publickey').val() == '')
+			{
+
+				$('#publickeyerr').html("{{ i18n.__("Error: Enter the signers public key") }}");
+	
+			}
+			else
+			{
+
+				$('#validatebutton').hide();
+				$('#validateprogress').show();
+		
+				socket.emit('validateMessage', $('#message').val(), $('#signature').val(), $('#publickey').val(), function(validateResponse) {
+
+					$('#validatebutton').show();
+					$('#validateprogress').hide();
+			
+					if (validateResponse == true)
+					{
+				
+						$('#validateresults').html(`<h2 style="color: green">{{ i18n.__("This message and signature is VALID") }}</h2>`);
+
+						$('#validatebutton').css({background: 'green', border: '2px solid green'});
+
+
+					}
+					else
+					{
+			
+						$('#validateresults').html(`<h2 style="color: red">{{ i18n.__("This message and signature is NOT VALID") }}</h2>`);
+
+						$('#validatebutton').css({background: 'red', border: '2px solid red'});
+
+					}
+
+				});
+			
+			}
+
+		
+		});
+  	
+  	}
+  	
+  	function loadSettingsPage() {
+  	
+	  let currentLocale = "{{ i18n.getLocale() }}";
+	  let localesObject = JSON.parse(`{{ localesObject }}`);
+	  let availLocales = Object.keys(localesObject);
+  
+	  availLocales.forEach(item => {
+	
+		if (item == currentLocale)
+		{
+		  $('#language').append(`<option selected value="${item}">${localesObject[item]}</option>`);
+		}
+		else
+		{
+		  $('#language').append(`<option value="${item}">${localesObject[item]}</option>`);
+		}
+	
+	  });
+
+	  let selectedPeer = "{{ selectedPeer }}";
+	  let peers = {{ peers }};
+  
+	  peers.forEach(item => {
+	
+		if (item == selectedPeer)
+		{
+		  $('#peer').append(`<option selected value="${item}">${item}</option>`);
+		}
+		else
+		{
+		  $('#peer').append(`<option value="${item}">${item}</option>`);
+		}
+	
+	  });
+  
+  	  $('#language').off('change');
+	  $('#language').on('change', (e) => {
+  
+		socket.emit('updateLocale', $('#language').val(), function(result) {
+	
+			if (result == true) router.route('GET', '/main', () => {});
+	
+		});
+  
+	  });
+  
+      $('#peer').off('change');
+	  $('#peer').on('change', (e) => {
+  
+		socket.emit('updatePeer', $('#peer').val(), function(result) {
+	
+			if (result == true)
+			{
+
+				$('#peer').addClass('is-valid');
+				setTimeout(function() {
+					$('#peer').removeClass('is-valid');
+				},1000);
+		
+			}
+	
+		});
+  
+	  });
+  
+  	  $('#newpeerbutton').off('click');
+	  $('#newpeerbutton').on('click', (e) => {
+  
+		e.preventDefault();
+	
+		let thisPeer;
+	
+		if ($('#peerport').val() == '')
+		{
+			thisPeer = $('#peerproto').val() + "://" + $('#peerhost').val();
+		}
+		else
+		{
+			thisPeer = $('#peerproto').val() + "://" + $('#peerhost').val() + ":" + $('#peerport').val();
+		}
+	
+		var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+		var regex = new RegExp(expression);
+	
+		if (thisPeer.match(regex)) {
+	  
+			socket.emit('addCustomPeer', thisPeer, function(result) {
+	
+				if (result == true) 
+				{
+				
+					$('#peer').append(`<option selected value="${thisPeer}">${thisPeer}</option>`);
+					
+					$('#peer').addClass('is-valid');
+					setTimeout(function() {
+						$('#peer').removeClass('is-valid');
+					},1000);
+					
+				
+				}
+
+			});
+	  
+		}
+		else
+		{
+	
+			$('#addpeererr').html("{{ i18n.__("Error: Peer info seems invalid") }}");
+	
+		}
+
+	  });
+	
+	  $('#viewbutton').off('click');
+	  $('#viewbutton').on('click', (e) => {
+  
+		e.preventDefault();
+	
+		if ($('#password').val() == '')
+		{
+
+			$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+	
+		}
+		else
+		{
+
+			$('#viewbutton').show();
+			$('#viewprogress').hide();
+				
+			socket.emit('getAccountKeys', $('#password').val(), function(accountInfo) {
+
+				if (accountInfo.address)
+				{
+			
+					$('#userform2').html(`<div class="right" id="webform">
+										<form class="accountWrapper">
+											<fieldset>
+												<center>
+												<h1><img src="../static/media/bamboo-bmb-logo.png" style="height:50px;"> {{ i18n.__("Bamboo Wallet") }}</h1>
+												</center>
+												<div class="form-group" style="margin-top:30px;">
+													<label>{{ i18n.__("Your Account Address") }}</label>
+													<textarea class="form-control" style="height: 55px;">` + accountInfo.address + `</textarea>
+												</div>
+											
+												<div class="form-group">
+													<label>{{ i18n.__("Mnemonic Phrase") }}</label>
+													<textarea class="form-control" style="height: 55px;">` + accountInfo.mnemonic + `</textarea>
+												</div>
+											
+												<div class="form-group">
+													<label>{{ i18n.__("Public Key") }}</label>
+													<textarea class="form-control" style="height: 55px;">` + accountInfo.publicKey + `</textarea>
+												</div>
+											
+												<div class="form-group">
+													<label>{{ i18n.__("Private Key") }}</label>
+													<textarea class="form-control" style="height: 82px;">` + accountInfo.privateKey + `</textarea>
+												</div>
+											
+												<div id="buttonsdiv" style="width:100%; text-align:center">
+													<button id="gotoaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-right:10px;">{{ i18n.__("Continue") }}</button>
+													<button id="printpage" class="btn btn-primary nimmu-user-sibmit-button" style="width:45%; margin-left:10px;"><i class="fa-solid fa-print"></i> {{ i18n.__("Print Page") }}</button>
+												</div>
+												<div id="warningdiv" style="text-align:center; margin-top:10px;">
+													<strong>
+													{{ i18n.__("Put this in a safe place!") }}<br />
+													{{ i18n.__("Do not transmit over insecure methods such as email.") }}<br />
+													{{ i18n.__("You can also print this later as long as you have your encryption password.") }}
+													</strong>
+												</div>
+											</fieldset>
+										</form>
+									</div>`);
+								
+						$('#gotoaccount').on('click', function(e) {
+
+							e.preventDefault();
+
+				  			$('.navbar-brand').removeClass('active');
+				  			$('#gotohome').addClass('active');
+				  
+							myTemplate = document.getElementById('templateSettingsPage');
+							normalContent = document.getElementById('maincontent');
+							clonedTemplate = myTemplate.content.cloneNode(true);
+							normalContent.innerHTML = "";
+							normalContent.appendChild(clonedTemplate);
+
+							loadSettingsPage();
+      					
+						});		
+								
+						$('#printpage').on('click', function(e) {
+
+							e.preventDefault();
+						
+							$("#buttonsdiv").hide();
+						
+							$("#topnav").hide();
+
+							socket.emit('print', function(status) {
+
+								$("#buttonsdiv").show();
+							
+								$("#topnav").show();
+						
+							});
+					
+						});	
+								
+								
+				}
+				else
+				{
+
+					$('#viewbutton').show();
+					$('#viewprogress').hide();
+	
+					$('#passerr').html("{{ i18n.__("Error: Unable to view account.  Check password and try again.") }}");
+
+				}
+			
+			});
+		
+		}
+	
+	  })
+  	
+  	}
   	
   </script>
+  
   {% block javascripts %}{% endblock %}
+  
+  <template id="templateAccountPage">
+  
+  	{% include 'account.twig' %}
+  
+  </template>
+  
+  <template id="templateSendPage">
+  
+  	{% include 'send.twig' %}
+  
+  </template>
+  
+  <template id="templateReceivePage">
+  
+  	{% include 'receive.twig' %}
+  
+  </template>
+  
+  <template id="templateSignPage">
+  
+  	{% include 'sign.twig' %}
+  
+  </template>
+  
+  <template id="templateVerifyPage">
+  
+  	{% include 'verify.twig' %}
+  
+  </template>
+
+  <template id="templateSettingsPage">
+  
+  	{% include 'settings.twig' %}
+  
+  </template>
   
 </body>
 

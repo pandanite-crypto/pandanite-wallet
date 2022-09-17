@@ -1,9 +1,7 @@
-{% extends 'layout.twig' %}
 
-{% block body %}
 	<div class="user-form2" id="userform2">
 		<div class="right">
-			<form class="accountWrapper">
+			<form class="accountWrapper" onsubmit="event.preventDefault();">
 				<fieldset>
 					
 					<div class="form-group">
@@ -35,66 +33,3 @@
 			</form>
 		</div>
 	</div>
-{% endblock %}
-{% block javascripts %}
-<script>
-
-$(document).ready(function() {
-
-	$('#validatebutton').on('click', (e) => {
-  
-  		e.preventDefault();
-
-		if ($('#signature').val() == '')
-		{
-
-			$('#signatureerr').html("{{ i18n.__("Error: Enter the signature") }}");
-	
-		}
-		else if ($('#publickey').val() == '')
-		{
-
-			$('#publickeyerr').html("{{ i18n.__("Error: Enter the signers public key") }}");
-	
-		}
-		else
-		{
-
-			$('#validatebutton').hide();
-			$('#validateprogress').show();
-		
-			socket.emit('validateMessage', $('#message').val(), $('#signature').val(), $('#publickey').val(), function(validateResponse) {
-
-				$('#validatebutton').show();
-				$('#validateprogress').hide();
-			
-				if (validateResponse == true)
-				{
-				
-					$('#validateresults').html(`<h2 style="color: green">{{ i18n.__("This message and signature is VALID") }}</h2>`);
-
-
-					$('#validatebutton').css({background: 'green', border: '2px solid green'});
-
-
-				}
-				else
-				{
-			
-					$('#validateresults').html(`<h2 style="color: red">{{ i18n.__("This message and signature is NOT VALID") }}</h2>`);
-
-					$('#validatebutton').css({background: 'red', border: '2px solid red'});
-
-				}
-
-			});
-			
-		}
-
-  		
-  	});
-
-});    
-
-</script>
-{% endblock %}

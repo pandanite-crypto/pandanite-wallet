@@ -107,5 +107,6 @@
 	"Enter the Signature to Validate": "Enter the Signature to Validate",
 	"Validating Message": "Validating Message",
 	"Block #": "Block #",
-	"Signing Message": "Signing Message"
+	"Signing Message": "Signing Message",
+	"Creating Account": "Creating Account"
 }
