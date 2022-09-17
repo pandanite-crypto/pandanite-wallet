@@ -4,7 +4,7 @@
 
 
 	<div style="height:25px; width: 100%; text-align:right; padding-right:0px; color: #000;">
-		<span id="accountaddress" style="font-size:20px;">{{loadedAccount}}</span> <button style="border:0px; padding:3px; background: transparent;" data-clipboard-target="#accountaddress" id="copyaddress"><i class="icofont-copy" style="font-size:20px; cursor: pointer;"></i></button>
+		<span id="accountaddress" style="font-size:20px;">{{loadedAccount}}</span> <button style="border:0px; padding:3px; background: transparent;" data-clipboard-target="#accountaddress" id="copyaddress"><svg fill="#000" style="width:20px; height:20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button>
 	</div>
 	<div id='transactiongrid' style="height:100%; width:100%;"></div>
 
@@ -22,25 +22,9 @@ $(document).ready(function() {
   	
   	$('#copyaddress').popover({trigger: 'focus', content: "{{ i18n.__("Copied") }}", delay: { "hide": 900 }});
 	
-	
-	
 	function forceRefresh() {
 
-		setTimeout(function() { 
-			$('#forcerefrsh').addClass('icofont-rotate-90');
-		},200);
-
-		setTimeout(function() { 
-			$('#forcerefrsh').removeClass('icofont-rotate-90');
-		},400);
-
-		setTimeout(function() { 
-			$('#forcerefrsh').addClass('icofont-rotate-90');
-		},600);
-
-		setTimeout(function() { 
-			$('#forcerefrsh').removeClass('icofont-rotate-90');
-		},800);
+		$('#forcerefrsh').addClass('fa-spin');
 		
 		socket.emit('forcerefresh');
 	
@@ -122,7 +106,7 @@ $(document).ready(function() {
 				  data.map(txinfo => [
 					(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
 					txinfo.to == loadedAddress ? 'Receive' : 'Send',
-					gridjs.html(`<span class='transactioninfo' data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>`),
+					gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
 					Big(txinfo.amount).div(10**4).toFixed(4),
 					txinfo.from,
 					txinfo.to
@@ -170,7 +154,8 @@ $(document).ready(function() {
 			let thistxid = $(this).data('txid');
 			let thisfrom = $(this).data('from');
 			let thisto = $(this).data('to');
-			
+			let thispending = $(this).data('pending');
+
 			let thisamount = '0.0000';
 			
 			try {
@@ -202,6 +187,8 @@ $(document).ready(function() {
 					<div style="padding:2px;" class="nicescrollable">` + thisfee + `</div>
 					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Timestamp") }}</div>
 					<div style="padding:2px;" class="nicescrollable">` + (new Date(parseInt(thistimestamp))).toLocaleString() + `</div>
+					<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Status") }}</div>
+					<div style="padding:2px;" class="nicescrollable">` + (thispending==true?'{{ i18n.__("Pending") }}':'{{ i18n.__("Confirmed") }}') + `</div>
 					</div>`;
 
 		  	var frag = document.createRange().createContextualFragment('<div style="text-align:left;">' + htmlcode + '</div>');
@@ -237,10 +224,10 @@ $(document).ready(function() {
 		
 		loadedAddress = accountInfo.address;
 		
-		let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='icofont-refresh' style='cursor:pointer;'></i>";
+		let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
 		
 		try {
-			formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='icofont-refresh' style='cursor:pointer;'></i>";
+			formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
 		} catch (e) {
 		
 		}
@@ -266,7 +253,7 @@ $(document).ready(function() {
 					  data.map(txinfo => [
 						(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
 						txinfo.to == loadedAddress ? 'Receive' : 'Send',
-						txinfo.txid,
+						gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
 						Big(txinfo.amount).div(10**4).toFixed(4)
 					  ])
 					);
@@ -292,10 +279,10 @@ $(document).ready(function() {
 		
 			loadedAddress = accountInfo.address;
 		
-			let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='icofont-refresh' style='cursor:pointer;'></i>";
+			let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
 		
 			try {
-				formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='icofont-refresh' style='cursor:pointer;'></i>";
+				formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
 			} catch (e) {
 		
 			}

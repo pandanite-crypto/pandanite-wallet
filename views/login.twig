@@ -23,8 +23,8 @@
 			</form>
 			<div class="form-bottom text-center">
 				<h4 class="or">{{ i18n.__("OR") }}</h4>
-				<button id="createaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:40%; margin-right:10px;">{{ i18n.__("Create Account") }}</button>
-				<button id="restoreaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:40%; margin-left:10px;">{{ i18n.__("Restore Account") }}</button>
+				<button id="createaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:47%; margin-right:2%;">{{ i18n.__("Create Account") }}</button>
+				<button id="restoreaccount" class="btn btn-primary nimmu-user-sibmit-button" style="width:47%; margin-left:2%;">{{ i18n.__("Restore Account") }}</button>
 			</div>
 		</div>
 	</div>
@@ -42,6 +42,12 @@ $(document).ready(function() {
   	
   	});
   
+  });
+  
+  $('#password').on('keypress',function(e) {
+	if(e.which == 13) {
+		$('#loginbutton').trigger('click');
+	}
   });
 	
   $('#loginbutton').on('click', (e) => {

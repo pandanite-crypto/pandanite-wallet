@@ -1,6 +1,6 @@
 {
   "name": "Bamboo-Wallet",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Electron Based Wallet for Bamboo Crypto",
   "main": "main.js",
   "scripts": {
@@ -20,6 +20,7 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "dependencies": {
+    "@octokit/rest": "^19.0.4",
     "big.js": "^6.2.1",
     "bip39": "^3.0.4",
     "bootstrap": "4.2.1",
@@ -35,6 +36,7 @@
     "popper.js": "^1.16.1",
     "portfinder": "^1.0.32",
     "qrcode": "^1.5.1",
+    "semver": "^7.3.7",
     "socket.io": "^4.5.2",
     "v8-compile-cache": "^2.3.0"
   },
@@ -76,7 +78,7 @@
           "name": "@electron-forge/maker-dmg",
           "config": {
             "icon": "./icons/mac/icon.icns",
-            "background": "./static/media/dmg-background.jpg",
+            "background": "./static/media/dmg-background.png",
             "format": "ULFO"
           }
         },

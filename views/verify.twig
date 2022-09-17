@@ -1,0 +1,100 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+	<div class="user-form2" id="userform2">
+		<div class="right">
+			<form class="accountWrapper">
+				<fieldset>
+					
+					<div class="form-group">
+						<label>{{ i18n.__("Enter Message to Verify") }}</label>
+						<textarea id="message" name="message" class="form-control" autofocus style="width:100%; height: 100px;" ></textarea>
+					</div>
+
+					<div class="form-group">
+						<label>{{ i18n.__("Enter the Signers Public Key") }}</label>
+						<input id="publickey" type="text" name="publickey" class="form-control" />
+						<span id="publickeyeerr" style="color: red;"></span>
+					</div>
+					
+					<div class="form-group">
+						<label>{{ i18n.__("Enter the Signature to Validate") }}</label>
+						<input id="signature" type="text" name="signature" class="form-control" />
+						<span id="signatureerr" style="color: red;"></span>
+					</div>
+
+					
+					<button id="validatebutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Validate") }}</button>
+					<div class="progress" id="validateprogress" style="display:none; height:50px;">
+					  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%; color: #fff; text-align:center;">{{ i18n.__("Validating Message") }} ...</div>
+					</div>
+
+					<div class="form-group" id="validateresults" style="text-align:center; margin-top:10px;"></div>
+
+				</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+
+$(document).ready(function() {
+
+	$('#validatebutton').on('click', (e) => {
+  
+  		e.preventDefault();
+
+		if ($('#signature').val() == '')
+		{
+
+			$('#signatureerr').html("{{ i18n.__("Error: Enter the signature") }}");
+	
+		}
+		else if ($('#publickey').val() == '')
+		{
+
+			$('#publickeyerr').html("{{ i18n.__("Error: Enter the signers public key") }}");
+	
+		}
+		else
+		{
+
+			$('#validatebutton').hide();
+			$('#validateprogress').show();
+		
+			socket.emit('validateMessage', $('#message').val(), $('#signature').val(), $('#publickey').val(), function(validateResponse) {
+
+				$('#validatebutton').show();
+				$('#validateprogress').hide();
+			
+				if (validateResponse == true)
+				{
+				
+					$('#validateresults').html(`<h2 style="color: green">{{ i18n.__("This message and signature is VALID") }}</h2>`);
+
+
+					$('#validatebutton').css({background: 'green', border: '2px solid green'});
+
+
+				}
+				else
+				{
+			
+					$('#validateresults').html(`<h2 style="color: red">{{ i18n.__("This message and signature is NOT VALID") }}</h2>`);
+
+					$('#validatebutton').css({background: 'red', border: '2px solid red'});
+
+				}
+
+			});
+			
+		}
+
+  		
+  	});
+
+});    
+
+</script>
+{% endblock %}

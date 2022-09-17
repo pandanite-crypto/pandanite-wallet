@@ -1,17 +1,48 @@
+@font-face {
+    font-family: 'Karla Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Karla Regular'), url('./fonts/Karla-Regular.woff') format('woff');
+}
+    
+
+@font-face {
+    font-family: 'Karla Italic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Karla Italic'), url('./fonts/Karla-Italic.woff') format('woff');
+}
+    
+
+@font-face {
+    font-family: 'Karla Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Karla Bold'), url('./fonts/Karla-Bold.woff') format('woff');
+}
+    
+
+@font-face {
+    font-family: 'Karla BoldItalic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Karla BoldItalic'), url('./fonts/Karla-BoldItalic.woff') format('woff');
+}
+
 body {
     font-size: 14px;
-    font-family: "Karla",sans-serif;
+    font-family: "Karla Regular",sans-serif;
     color: #676b79;
 }
 
 .container {
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 59px);
 }
 
 .container2 {
     display: flex;
     align-items: center;
-    min-height: calc(100vh - 20px);
+    min-height: 100vh;
 }
 
 .user-form {
@@ -90,6 +121,7 @@ body {
     height: 100%;
     width: 100%;
     z-index: -1;
+    padding: 5px;
 }
 
 .user-form .form-group label {

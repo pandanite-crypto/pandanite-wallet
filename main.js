@@ -16,17 +16,27 @@ const Datastore 			= require('nedb-promises');
 const Big					= require('big.js');
 const path					= require('path');
 const portfinder 			= require('portfinder');
+const { Octokit } 			= require('@octokit/rest')
+const semver 				= require('semver')
+const packageJson 			= require('./package.json');
 
-var db = {};
+const bambooAppVersion = 'v' + packageJson.version;
 
-var packageJson 			= require('./package.json');
-
-var bambooAppVersion = 'v' + packageJson.version;
+const octokit = new Octokit({
+					userAgent: 'Bamboo Wallet ' + bambooAppVersion,
+					baseUrl: 'https://api.github.com',
+					request: {
+						agent: undefined,
+						fetch: undefined,
+						timeout: 0
+					}
+				});
 
 const userDataPath = app.getPath('userData');
 var accountsdb = path.join(userDataPath, 'accounts.db');
 var settingsdb = path.join(userDataPath, 'settings.db');
 
+var db = {};
 db.accounts = Datastore.create(accountsdb);
 db.settings = Datastore.create(settingsdb);
 
@@ -34,6 +44,10 @@ db.accounts.ensureIndex({ fieldName: 'account' }, function (err) {
   // If there was an error, err is not null
 });
 
+db.settings.ensureIndex({ fieldName: 'account' }, function (err) {
+  // If there was an error, err is not null
+});
+	
 var localesObject = {
 	'en': 'English', 
 	'id': 'Bahasa Indonesia', 
@@ -91,6 +105,8 @@ var loadedAccount = '';
 var accountTransactions = [];
 var accountBalance = Big(0).toFixed(4);
 var serverPort;
+var upgradeAvailable = false;
+var latestGitVersion = '';
 
 const server = require('http').createServer(app);
 
@@ -98,25 +114,43 @@ const io = require('socket.io')(server);
 
 let mainWindow
 
-portfinder.getPort(function (err, port) {
+function loadSettings() {
 
-	if (err) app.quit()
+	checkVersion();
+
+	db.settings.findOne({account: 'default'}).exec().then((defaultsettings) => {		
+
+		if (defaultsettings && defaultsettings.locale) i18n.setLocale(defaultsettings.locale);
+
+		portfinder.getPort(function (err, port) {
+
+			if (err) app.quit()
 	
-	serverPort = port;
-	server.listen(serverPort);
+			serverPort = port;
+			server.listen(serverPort);
 
-	console.log('Running on port: ' + serverPort);
+			console.log('Running on port: ' + serverPort);
+					
+			twig.view = {
+				i18n: i18n,
+				version: bambooAppVersion,
+				localesObject: JSON.stringify(localesObject),
+				peers: JSON.stringify(peers),
+				selectedPeer: selectedPeer,
+				serverPort: serverPort,
+				upgradeAvailable: upgradeAvailable,
+				latestVersion: latestGitVersion
+			};
+			
+			createWindow();
+
+		});
+
+	}).catch((e) => {
+		console.log(e);
+	});
 	
-	twig.view = {
-		i18n: i18n,
-		version: bambooAppVersion,
-		localesObject: JSON.stringify(localesObject),
-		peers: JSON.stringify(peers),
-		selectedPeer: selectedPeer,
-		serverPort: serverPort
-	}
-
-});
+}
 
 function createWindow () {
 
@@ -141,54 +175,70 @@ function createWindow () {
   
   router.get('/login', ( req, res ) => {
 
+	twig.view.currentRoute = 'login';
     mainWindow.loadURL(`file://${__dirname}/views/login.twig`);
 
   });
 
   router.get('/create', ( req, res ) => {
 
+	twig.view.currentRoute = 'create';
     mainWindow.loadURL(`file://${__dirname}/views/create.twig`);
 	
   });
 
   router.get('/restore', ( req, res ) => {
 
+	twig.view.currentRoute = 'restore';
     mainWindow.loadURL(`file://${__dirname}/views/restore.twig`);
 	
   });
 
   router.get('/restorepriv', ( req, res ) => {
 
+	twig.view.currentRoute = 'restorepriv';
     mainWindow.loadURL(`file://${__dirname}/views/restorepriv.twig`);
 	
   });
   
   router.get('/account', ( req, res ) => {
 
+	twig.view.currentRoute = 'account';
     mainWindow.loadURL(`file://${__dirname}/views/account.twig`);
 	
   });
 
   router.get('/send', ( req, res ) => {
 
+	twig.view.currentRoute = 'send';
     mainWindow.loadURL(`file://${__dirname}/views/send.twig`);
 	
   });
 
   router.get('/receive', ( req, res ) => {
 
+	twig.view.currentRoute = 'receive';
     mainWindow.loadURL(`file://${__dirname}/views/receive.twig`);
 	
   });
 
-  router.get('/mine', ( req, res ) => {
+  router.get('/sign', ( req, res ) => {
 
-    mainWindow.loadURL(`file://${__dirname}/views/mine.twig`);
+	twig.view.currentRoute = 'sign';
+    mainWindow.loadURL(`file://${__dirname}/views/sign.twig`);
 	
   });
+  
+  router.get('/verify', ( req, res ) => {
 
+	twig.view.currentRoute = 'verify';
+    mainWindow.loadURL(`file://${__dirname}/views/verify.twig`);
+	
+  });
+  
   router.get('/settings', ( req, res ) => {
 
+	twig.view.currentRoute = 'settings';
     mainWindow.loadURL(`file://${__dirname}/views/settings.twig`);
 	
   });
@@ -198,7 +248,8 @@ function createWindow () {
 	loadedAccount = '';
 	accountTransactions = [];
 	accountBalance = Big(0).toFixed(4);
-
+	
+	twig.view.currentRoute = 'login';
     mainWindow.loadURL(`file://${__dirname}/views/login.twig`);
 	
   });
@@ -209,6 +260,8 @@ function createWindow () {
   	{
   		checkBlocksToDownload();
   	}
+  	
+  	checkPendingTransactions();
   	
   	mainSocket.emit('blockStats', {blockChainHeight: blockChainHeight, lastDownloadedBlock: lastDownloadedBlock, isConnected: isConnected, connectPeer: selectedPeer});
   	
@@ -235,7 +288,7 @@ function createWindow () {
 
 }
 
-app.on('ready', createWindow)
+app.on('ready', loadSettings)
 
 app.on('resize', function(e,x,y){
   mainWindow.setSize(x, y);
@@ -277,7 +330,7 @@ io.on('connection', (socket) => {
 	socket.on('updateLocale', (locale, callback) => {
 
 		(async () => {
-		
+
 			i18n.setLocale(locale);
 		
 			let havesettings = await db.settings.find({account: loadedAccount});
@@ -299,7 +352,28 @@ io.on('connection', (socket) => {
 				await db.settings.update({account: loadedAccount}, {locale: locale});
 			
 			}
+
 		
+			let havedefaultsettings = await db.settings.find({account: 'default'}); // sets the default for login screen
+			
+			if (havedefaultsettings.length == 0)
+			{
+			
+				let newSettings = {
+					account: 'default',
+					locale: locale
+				}
+				
+				await db.settings.insert(newSettings);
+			
+			}
+			else
+			{
+				
+				await db.settings.update({account: 'default'}, {locale: locale});
+			
+			}
+
 			callback(true);
 		
 		})();
@@ -556,6 +630,76 @@ io.on('connection', (socket) => {
 	
 	});
 
+	socket.on('signMessage', (message, password, callback) => {
+	
+		(async () => {
+		
+			let loadAccount = await db.accounts.findOne({account: loadedAccount});
+
+			if (loadAccount && loadAccount.account)
+			{
+		
+				try {
+		
+					let decryptedAccount = JSON.parse(decrypt(loadAccount.encryptedData, password));
+
+					if (decryptedAccount.address == loadedAccount)
+					{
+
+						let privateKey = decryptedAccount.privateKey;
+						let publicKey = decryptedAccount.publicKey;
+
+						let keyPair = {
+							publicKey: Buffer.from(publicKey, 'hex'),
+							privateKey: Buffer.from(privateKey, 'hex')
+						}
+
+						let signature = ed25519.Sign(Buffer.from(message, 'utf8'), keyPair); //Using Sign(Buffer, Keypair object)
+
+						let sig2 = signature.toString('hex').toUpperCase();
+
+						callback({status: "OK", publicKey: publicKey, signature: sig2});
+
+					}
+					else
+					{
+				
+						callback({status: "BADPASS"});
+				
+					}
+
+				} catch (e) {
+		
+					callback({status: "BADPASS"});
+		
+				}
+		
+			}
+			else
+			{
+
+				callback({status: "ERR"});
+		
+			}
+		
+		})();
+		
+	});
+
+	socket.on('validateMessage', (message, signature, publicKey, callback) => {
+
+		if (ed25519.Verify(Buffer.from(message, 'utf8'), Buffer.from(signature, 'hex'), Buffer.from(publicKey, 'hex'))) {
+		
+			callback(true);
+			
+		} else {
+		
+			callback(false);
+			
+		}
+		
+	});
+	
 	socket.on('sendTransaction', (toaddress, amount, password, callback) => {
 	
 		(async () => {
@@ -662,6 +806,7 @@ io.on('connection', (socket) => {
 								let txid = postResponse[0].txid;		
 
 								tx_json.txid = txid;
+								tx_json.pending = true;
 
 								accountTransactions.unshift(tx_json);
 
@@ -735,7 +880,9 @@ io.on('connection', (socket) => {
 							localesObject: JSON.stringify(localesObject),
 			   				peers: JSON.stringify(peers),
     						selectedPeer: selectedPeer,
-    						serverPort: serverPort
+    						serverPort: serverPort,
+    						upgradeAvailable: upgradeAvailable,
+    						latestVersion: latestGitVersion
 						}
 						
 						accountTransactions = [];
@@ -803,7 +950,13 @@ io.on('connection', (socket) => {
 	
 	socket.on('forcerefresh', () => {
 	
-		socket.emit('accountUpdate');
+		(async () => {
+	
+			await getAccountTransactions();
+	
+			socket.emit('accountUpdate');
+		
+		})();
 		
 	});
 	
@@ -811,10 +964,64 @@ io.on('connection', (socket) => {
 
 // Functions
 
-function checkMine(transaction)
-{
+function checkMine(transaction) {
 
 	return transaction.to == loadedAccount || transaction.from == loadedAccount;
+
+}
+
+function notYetShown(transaction) {
+
+	let testArray = [];
+	for (let i = 0; i < accountTransactions.length; i++) testArray.push(accountTransactions[i].txid);
+
+	return testArray.indexOf(transaction.txid) == -1;
+
+}
+
+async function checkVersion() {
+
+	const { data: tags } = await octokit.rest.repos.listTags({
+	  owner: 'mrmikeo',
+	  repo: 'bamboo-wallet'
+	});
+
+	var tagsSorted = tags.map(function (item) {
+	  return item.name
+	})
+	.filter(semver.valid)
+	.sort(semver.rcompare)
+
+    let latestVersion = tagsSorted[0];
+	
+	console.log("Lastest Version: " + latestVersion);
+
+	twig.view.latestVersion = latestVersion;
+	latestGitVersion = latestVersion;
+	
+	if (latestVersion != twig.view.version) 
+	{
+		upgradeAvailable = true;
+		twig.view.upgradeAvailable = true;
+	}
+	else
+	{
+		upgradeAvailable = false;
+		twig.view.upgradeAvailable = true;
+	}
+
+}
+
+async function checkPendingTransactions() {
+
+	let pendingTransactions = await got(selectedPeer + "/tx_json").json();
+	pendingTransactions = pendingTransactions.filter(checkMine);
+	pendingTransactions = pendingTransactions.filter(notYetShown);
+
+	if (pendingTransactions.length > 0)
+	{
+		signalTransactionRefresh = true;
+	}
 
 }
 
