@@ -53,7 +53,7 @@ const localesObject = {
 	'id': 'Bahasa Indonesia', 
 	'es': 'Español (Internacional)', 
 	'fr': 'Français', 
-	'ph': 'Filipino', 
+	'tl': 'Filipino', 
 	'af': 'Français (Afrique)', 
 	'el': 'Ελληνικά',
 	'de': 'Deutsch',
