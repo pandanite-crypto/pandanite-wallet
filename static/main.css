@@ -29,20 +29,23 @@
     src: local('Karla BoldItalic'), url('./fonts/Karla-BoldItalic.woff') format('woff');
 }
 
+
 body {
     font-size: 14px;
     font-family: "Karla Regular",sans-serif;
     color: #676b79;
+    min-height: 100vh;
 }
 
 .container {
-    min-height: calc(100vh - 99px);
+    margin-bottom:19px
 }
 
 .container2 {
     display: flex;
     align-items: center;
     min-height: 100vh;
+    margin-bottom:0px;
 }
 
 .user-form {
