@@ -106,5 +106,6 @@
 	"Give the person whom you want to validate this message 3 items:  The message, your public key, and the signature.": "Give the person whom you want to validate this message 3 items:  The message, your public key, and the signature.",
 	"Enter the Signature to Validate": "Enter the Signature to Validate",
 	"Validating Message": "Validating Message",
-	"Block #": "Block #"
+	"Block #": "Block #",
+	"Signing Message": "Signing Message"
 }
