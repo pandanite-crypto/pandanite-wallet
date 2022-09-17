@@ -34,12 +34,19 @@
 
 $(document).ready(function() {
 
-  socket.emit('getAccountList', function(accounts) {
+  socket.emit('getAccountList', function(accounts, selected) {
   
   	accounts.forEach(item => {
   	
-  		$('#account').append(`<option value="${item}">${item}</option>`);
-  	
+  		if (item == selected)
+  		{
+  			$('#account').append(`<option selected value="${item}">${item}</option>`);
+  		}
+  		else
+  		{
+  			$('#account').append(`<option value="${item}">${item}</option>`);
+  		}
+  		
   	});
   
   });

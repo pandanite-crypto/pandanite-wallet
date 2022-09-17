@@ -2,6 +2,14 @@
 
 <img src="https://github.com/mrmikeo/bamboo-wallet/raw/main/static/media/screenshot.png">
 
+<h3>Features</h3>
+
+<li>Light Client.  Does not download blocks to your computer</li>
+<li>Multiple Language Support</li>
+<li>Send/Receive BMB</li>
+<li>Sign/Verify Messages</li>
+<li>Restore account from mnemonic phase or keyPair</li>
+
 <h3>Download</h3>
 
 ```

@@ -33,8 +33,8 @@ const octokit = new Octokit({
 				});
 
 const userDataPath = app.getPath('userData');
-var accountsdb = path.join(userDataPath, 'accounts.db');
-var settingsdb = path.join(userDataPath, 'settings.db');
+const accountsdb = path.join(userDataPath, 'accounts.db');
+const settingsdb = path.join(userDataPath, 'settings.db');
 
 var db = {};
 db.accounts = Datastore.create(accountsdb);
@@ -48,7 +48,7 @@ db.settings.ensureIndex({ fieldName: 'account' }, function (err) {
   // If there was an error, err is not null
 });
 	
-var localesObject = {
+const localesObject = {
 	'en': 'English', 
 	'id': 'Bahasa Indonesia', 
 	'es': 'Español (Internacional)', 
@@ -68,6 +68,7 @@ var localesObject = {
 	'sk': 'Slovenčina', 
 	'sl': 'Slovenščina', 
 	'vi': 'Tiếng Việt', 
+	'th': 'ภาษาไทย',
 	'tr': 'Türkçe', 
 	'lv': 'latviešu valoda', 
 	'ru': 'Русский', 
@@ -81,20 +82,20 @@ var localesObject = {
 	'ko': '한국어'
 	};
 
-var availableLocales = Object.keys(localesObject);
+const availableLocales = Object.keys(localesObject);
 
-var i18n = new (require('i18n-2'))({
+const i18n = new (require('i18n-2'))({
     // setup some locales - other locales default to the first locale
     locales: availableLocales,
     directory: `${app.getAppPath()}/locales`
 });
 
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+
 var peers = ['http://65.21.224.171:3000', 'http://65.21.198.115:3000', 'http://65.108.122.77:3000'];
-
 var randomPeer = randomIntFromInterval(0, (peers.length - 1));
-
 var selectedPeer = peers[randomPeer];
-
 var isConnected = false
 var blockChainHeight = 0;
 var lastDownloadedBlock = 0;
@@ -107,10 +108,6 @@ var accountBalance = Big(0).toFixed(4);
 var serverPort;
 var upgradeAvailable = false;
 var latestGitVersion = '';
-
-const server = require('http').createServer(app);
-
-const io = require('socket.io')(server);
 
 let mainWindow
 
@@ -138,7 +135,6 @@ function loadSettings() {
 				peers: JSON.stringify(peers),
 				selectedPeer: selectedPeer,
 				serverPort: serverPort,
-				upgradeAvailable: upgradeAvailable,
 				latestVersion: latestGitVersion
 			};
 			
@@ -354,14 +350,17 @@ io.on('connection', (socket) => {
 			}
 
 		
-			let havedefaultsettings = await db.settings.find({account: 'default'}); // sets the default for login screen
+			let havedefaultsettings = await db.settings.findOne({account: 'default'}); // sets the default for login screen
 			
-			if (havedefaultsettings.length == 0)
+			if (havedefaultsettings && havedefaultsettings.account)
 			{
+			
+				let existingSetting = havedefaultsettings.accountSelect;
 			
 				let newSettings = {
 					account: 'default',
-					locale: locale
+					locale: locale,
+					accountSelect: existingSetting
 				}
 				
 				await db.settings.insert(newSettings);
@@ -370,7 +369,7 @@ io.on('connection', (socket) => {
 			else
 			{
 				
-				await db.settings.update({account: 'default'}, {locale: locale});
+				await db.settings.update({account: 'default'}, {locale: locale, accountSelect: loadedAccount});
 			
 			}
 
@@ -437,7 +436,9 @@ io.on('connection', (socket) => {
 				accountBalance: accountBalance,
 				localesObject: JSON.stringify(localesObject),
 				peers: JSON.stringify(peers),
-				selectedPeer: selectedPeer
+				selectedPeer: selectedPeer,
+				serverPort: serverPort,
+				latestVersion: latestGitVersion
 			}
 				
 			callback(newAccount);
@@ -533,7 +534,9 @@ io.on('connection', (socket) => {
 					accountBalance: accountBalance,
 					localesObject: JSON.stringify(localesObject),
 					peers: JSON.stringify(peers),
-					selectedPeer: selectedPeer
+					selectedPeer: selectedPeer,
+					serverPort: serverPort,
+					latestVersion: latestGitVersion	
 				}
 				
 				callback(newAccount);
@@ -598,7 +601,9 @@ io.on('connection', (socket) => {
 					accountBalance: accountBalance,
 					localesObject: JSON.stringify(localesObject),
 					peers: JSON.stringify(peers),
-					selectedPeer: selectedPeer
+					selectedPeer: selectedPeer,
+					serverPort: serverPort,
+					latestVersion: latestGitVersion
 				}
 				
 				callback(newAccount);
@@ -872,6 +877,28 @@ io.on('connection', (socket) => {
 						
 						if (havesettings && havesettings.locale) i18n.setLocale(havesettings.locale);
 
+
+						let havedefaultsettings = await db.settings.findOne({account: 'default'}); // sets the default for login screen
+			
+						if (!havedefaultsettings)
+						{
+						
+							let newSettings = {
+								account: 'default',
+								locale: i18n.getLocale(),
+								accountSelect: loadedAccount
+							}
+				
+							await db.settings.insert(newSettings);
+			
+						}
+						else
+						{
+				
+							await db.settings.update({account: 'default'}, {accountSelect: loadedAccount});
+			
+						}
+
 						twig.view = {
 							i18n: i18n,
 							version: bambooAppVersion,
@@ -888,7 +915,7 @@ io.on('connection', (socket) => {
 						accountTransactions = [];
 						
 						await getAccountTransactions();
-											
+
 						callback("OK")
 					
 					}
@@ -933,8 +960,16 @@ io.on('connection', (socket) => {
 				accountList.push(thisAccount.account);
 		
 			}
-		
-			callback(accountList);
+			
+			let selected = '';
+			let havedefaultsettings = await db.settings.findOne({account: 'default'});
+						
+			if (havedefaultsettings && havedefaultsettings.account)
+			{
+				selected = havedefaultsettings.accountSelect;
+			}
+
+			callback(accountList, selected);
 		
 		})();
 	
@@ -996,19 +1031,7 @@ async function checkVersion() {
 	
 	console.log("Lastest Version: " + latestVersion);
 
-	twig.view.latestVersion = latestVersion;
 	latestGitVersion = latestVersion;
-	
-	if (latestVersion != twig.view.version) 
-	{
-		upgradeAvailable = true;
-		twig.view.upgradeAvailable = true;
-	}
-	else
-	{
-		upgradeAvailable = false;
-		twig.view.upgradeAvailable = true;
-	}
 
 }
 
@@ -1149,7 +1172,6 @@ async function checkBlocksToDownload() {
 		}
 
 	}
-	
 	
 	isDownloadingBlocks = false;
 
