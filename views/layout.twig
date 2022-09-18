@@ -333,7 +333,7 @@
 			},
 			{
 				id: 'txid',
-				name: '{{ i18n.__("TransactionId") }}'
+				name: '{{ i18n.__("Transaction Id") }}'
 			},
 			{
 				id: 'amount',
@@ -369,8 +369,25 @@
 		  },
 		  language: {
 			'search': {
-			  'placeholder': '🔍 search...'
+			  'placeholder': '🔍 {{ i18n.__("search") }}...'
 			},
+			'pagination': {
+			  'previous': '{{ i18n.__("previous") }}️',
+			  'next': '{{ i18n.__("next") }}',
+			  'showing': '{{ i18n.__("showing") }}',
+			  'results': '{{ i18n.__("results") }}',
+			  'navigate': (page, pages) => `{{ i18n.__("Page") }} ${page} {{ i18n.__("of") }} ${pages}`,
+			  'page': (page) => `{{ i18n.__("Page") }} ${page}`,
+			  'of': '{{ i18n.__("of") }}',
+			  'to': '{{ i18n.__("to") }}'
+			},
+		    sort: {
+			  'sortAsc': '{{ i18n.__("Sort column ascending") }}',
+			  'sortDesc': '{{ i18n.__("Sort column descending") }}'
+		    },
+		    loading: '{{ i18n.__("Loading") }}Loading...',
+		    noRecordsFound: '{{ i18n.__("No matching records found") }}',
+		    error: '{{ i18n.__("An error happened while fetching the data") }}'
 		  },
 		  style: { 
 			table: { 

@@ -108,5 +108,19 @@
 	"Validating Message": "Validating Message",
 	"Block #": "Block #",
 	"Signing Message": "Signing Message",
-	"Creating Account": "Creating Account"
+	"Creating Account": "Creating Account",
+	"Transaction Id": "Transaction Id",
+	"search": "search",
+	"previous": "previous",
+	"next": "next",
+	"showing": "showing",
+	"results": "results",
+	"Page": "Page",
+	"of": "of",
+	"to": "to",
+	"Sort column ascending": "Sort column ascending",
+	"Sort column descending": "Sort column descending",
+	"Loading": "Loading",
+	"No matching records found": "No matching records found",
+	"An error happened while fetching the data": "An error happened while fetching the data"
 }
