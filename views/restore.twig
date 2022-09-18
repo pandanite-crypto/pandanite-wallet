@@ -5,7 +5,7 @@
 		<div class="right" style="padding-top:0px;">
 			<form class="accountWrapper">
 				<fieldset>
-					<center>{{ i18n.__("Restore your account using your mnemonic phrase") }}</center><br /><br />
+					<center>{{ i18n.__("Restore your account using your mnemonic phrase") }}</center><br />
 					<div class="form-group" style="width:16.2%; display:inline-block;">
 						<label>{{ i18n.__("Word 1") }}</label>
 						<input id="word1" type="text" name="word1" class="form-control" autofocus/>
@@ -68,6 +68,12 @@
 						<span id="word12err" style="color: red;"></span>
 					</div>
 
+					
+					<div class="form-group">
+						<label>{{ i18n.__("Mnemonic Seed Password") }} &nbsp; (<span style="font-weight:bold; color: blue;">{{ i18n.__("Optional - Can Be Blank if you don't have one") }}</span>)</label>
+						<input id="seedpassword" type="text" name="seedpassword" class="form-control form-control-password" />
+					</div>
+					
 					<div class="form-group">
 						<label>{{ i18n.__("Create Encryption Password") }}</label>
 						<input id="password" type="password" name="password" class="form-control form-control-password" autofocus/>
@@ -177,7 +183,8 @@ $(document).ready(function() {
   			word10: $('#word10').val(),
   			word11: $('#word11').val(),
   			word12: $('#word12').val(),
-			password: $('#password').val()
+			password: $('#password').val(),
+			seedpassword: $('#seedpassword').val()
   		}
 
 		socket.emit('restoreAccount', restorevars, function(accountInfo) {
@@ -199,6 +206,11 @@ $(document).ready(function() {
 											<div class="form-group">
 												<label>{{ i18n.__("Mnemonic Phrase") }}</label>
 												<textarea class="form-control" style="height: 55px;">` + accountInfo.mnemonic + `</textarea>
+											</div>
+
+											<div class="form-group">
+												<label>{{ i18n.__("Seed Password") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.seedPassword + `</textarea>
 											</div>
 											
 											<div class="form-group">

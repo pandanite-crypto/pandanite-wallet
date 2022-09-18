@@ -122,5 +122,15 @@
 	"Sort column descending": "Sort column descending",
 	"Loading": "Loading",
 	"No matching records found": "No matching records found",
-	"An error happened while fetching the data": "An error happened while fetching the data"
+	"An error happened while fetching the data": "An error happened while fetching the data",
+	"Mnemonic Seed Password": "Mnemonic Seed Password",
+	"Optional - Can Be Blank": "Optional - Can Be Blank",
+	"Seed Password": "Seed Password",
+	"Restore your account using your private key": "Restore your account using your private key",
+	"Enter Your Public Key": "Enter Your Public Key",
+	"Enter Your Private Key": "Enter Your Private Key",
+	"Restore With Mnemonic Phrase Instead": "Restore With Mnemonic Phrase Instead",
+	"Error: Enter A Public Key": "Error: Enter A Public Key",
+	"Error: Enter A Private Key": "Error: Enter A Private Key",
+	"Optional - Can Be Blank if you don't have one": "Optional - Can Be Blank if you don't have one"
 }

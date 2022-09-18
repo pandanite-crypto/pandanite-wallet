@@ -16,6 +16,12 @@
 						<input id="password2" type="password" name="password" class="form-control form-control-password" />
 						<span id="pass2err" style="color: red;"></span>
 					</div>
+					
+					<div class="form-group">
+						<label>{{ i18n.__("Mnemonic Seed Password") }} &nbsp; (<span style="font-weight:bold; color: blue;">{{ i18n.__("Optional - Can Be Blank") }}</span>)</label>
+						<input id="seedpassword" type="text" name="seedpassword" class="form-control form-control-password" />
+					</div>
+					
 					<button id="createbutton" class="btn btn-primary nimmu-user-sibmit-button">{{ i18n.__("Create Account") }}</button>
 					
 					<div class="progress" id="createprogress" style="display:none; height:50px;">
@@ -77,7 +83,7 @@ $(document).ready(function() {
 		$('#createbutton').hide();
 		$('#createprogress').show();
 		
-		socket.emit('createAccount', $('#password').val(), function(accountInfo) {
+		socket.emit('createAccount', $('#password').val(), $('#seedpassword').val(), function(accountInfo) {
 
 			$('#createbutton').show();
 			$('#createprogress').hide();
@@ -99,6 +105,11 @@ $(document).ready(function() {
 											<div class="form-group">
 												<label>{{ i18n.__("Mnemonic Phrase") }}</label>
 												<textarea class="form-control" style="height: 55px;">` + accountInfo.mnemonic + `</textarea>
+											</div>
+
+											<div class="form-group">
+												<label>{{ i18n.__("Seed Password") }}</label>
+												<textarea class="form-control" style="height: 55px;">` + accountInfo.seedPassword + `</textarea>
 											</div>
 											
 											<div class="form-group">

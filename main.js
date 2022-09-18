@@ -19,6 +19,9 @@ const portfinder 			= require('portfinder');
 const { Octokit } 			= require('@octokit/rest')
 const semver 				= require('semver')
 const packageJson 			= require('./package.json');
+const Bamboo 				= require('bamboo-js');
+
+const bambooCrypto = new Bamboo.crypto();
 
 const bambooAppVersion = 'v' + packageJson.version;
 
@@ -87,7 +90,8 @@ const availableLocales = Object.keys(localesObject);
 const i18n = new (require('i18n-2'))({
     // setup some locales - other locales default to the first locale
     locales: availableLocales,
-    directory: `${app.getAppPath()}/locales`
+    directory: `${app.getAppPath()}/locales`,
+    extension: '.json'
 });
 
 const server = require('http').createServer(app);
@@ -196,50 +200,6 @@ function createWindow () {
     mainWindow.loadURL(`file://${__dirname}/views/restorepriv.twig`);
 	
   });
-  
-  /*
-  router.get('/account', ( req, res ) => {
-
-	twig.view.currentRoute = 'account';
-    mainWindow.loadURL(`file://${__dirname}/views/main.twig`);
-	
-  });
-
-  router.get('/send', ( req, res ) => {
-
-	twig.view.currentRoute = 'send';
-    mainWindow.loadURL(`file://${__dirname}/views/send.twig`);
-	
-  });
-
-  router.get('/receive', ( req, res ) => {
-
-	twig.view.currentRoute = 'receive';
-    mainWindow.loadURL(`file://${__dirname}/views/receive.twig`);
-	
-  });
-
-  router.get('/sign', ( req, res ) => {
-
-	twig.view.currentRoute = 'sign';
-    mainWindow.loadURL(`file://${__dirname}/views/sign.twig`);
-	
-  });
-  
-  router.get('/verify', ( req, res ) => {
-
-	twig.view.currentRoute = 'verify';
-    mainWindow.loadURL(`file://${__dirname}/views/verify.twig`);
-	
-  });
-  
-  router.get('/settings', ( req, res ) => {
-
-	twig.view.currentRoute = 'settings';
-    mainWindow.loadURL(`file://${__dirname}/views/settings.twig`);
-	
-  });
-  */
 
   router.get('/main', ( req, res ) => {
 
@@ -408,33 +368,20 @@ io.on('connection', (socket) => {
 
 	});
 	
-	socket.on('createAccount', (password, callback) => {
+	socket.on('createAccount', (password, seedpassword, callback) => {
 	
 		(async () => {
-
-			let mnemonic = bip39.generateMnemonic()
-
-			let hash = crypto.createHash('sha256').update(mnemonic).digest(); //returns a buffer
 		
-			let keyPair = ed25519.MakeKeypair(hash);
-
-			let address = walletAddressFromPublicKey(keyPair.publicKey.toString("hex").toUpperCase());
-
-			let newAccount = {
-				address: address,
-				publicKey: keyPair.publicKey.toString("hex").toUpperCase(),
-				privateKey: keyPair.privateKey.toString("hex").toUpperCase(),
-				mnemonic: mnemonic
-			};
+			let newAccount = bambooCrypto.generateNewAddress(seedpassword);
 
 			let encryptedData = encrypt(JSON.stringify(newAccount), password);
 		
 			let dbrecord = {
-				account: address,
+				account: newAccount.address,
 				encryptedData: encryptedData
 			};
 		
-			loadedAccount = address;
+			loadedAccount = newAccount.address;
 		
 			await db.accounts.insert(dbrecord);
 
@@ -507,30 +454,21 @@ io.on('connection', (socket) => {
 			{
 			
 				let password = options.password;
-			
-				let hash = crypto.createHash('sha256').update(mnemonic).digest(); //returns a buffer
-		
-				let keyPair = ed25519.MakeKeypair(hash);
 
-				let address = walletAddressFromPublicKey(keyPair.publicKey.toString("hex").toUpperCase());
+				let seedpassword = options.seedpassword;
 
-				let newAccount = {
-					address: address,
-					publicKey: keyPair.publicKey.toString("hex").toUpperCase(),
-					privateKey: keyPair.privateKey.toString("hex").toUpperCase(),
-					mnemonic: mnemonic
-				};
-
+				let newAccount = bambooCrypto.generateAddressFromMnemonic(mnemonic, seedpassword);
+				
 				let encryptedData = encrypt(JSON.stringify(newAccount), password);
 		
 				let dbrecord = {
-					account: address,
+					account: newAccount.address,
 					encryptedData: encryptedData
 				};
 		
-				loadedAccount = address;
+				loadedAccount = newAccount.address;
 						
-				await db.accounts.remove({account: address});
+				await db.accounts.remove({account: newAccount.address});
 				
 				await db.accounts.insert(dbrecord);
 				
@@ -579,7 +517,7 @@ io.on('connection', (socket) => {
 					callback(false);
 				}
 
-				let address = walletAddressFromPublicKey(keyPair.publicKey.toString("hex").toUpperCase());
+				let address = bambooCrypto.walletAddressFromPublicKey(keyPair.publicKey.toString("hex").toUpperCase());
 
 				let newAccount = {
 					address: address,
@@ -662,17 +600,10 @@ io.on('connection', (socket) => {
 
 						let privateKey = decryptedAccount.privateKey;
 						let publicKey = decryptedAccount.publicKey;
+						
+						let signature = bambooCrypto.signMessage(message, publicKey, privateKey);
 
-						let keyPair = {
-							publicKey: Buffer.from(publicKey, 'hex'),
-							privateKey: Buffer.from(privateKey, 'hex')
-						}
-
-						let signature = ed25519.Sign(Buffer.from(message, 'utf8'), keyPair); //Using Sign(Buffer, Keypair object)
-
-						let sig2 = signature.toString('hex').toUpperCase();
-
-						callback({status: "OK", publicKey: publicKey, signature: sig2});
+						callback({status: "OK", publicKey: publicKey, signature: signature});
 
 					}
 					else
@@ -701,27 +632,18 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('validateMessage', (message, signature, publicKey, callback) => {
+	
+		let validated = bambooCrypto.verifyMessage(message, publicKey, signature);
 
-		if (ed25519.Verify(Buffer.from(message, 'utf8'), Buffer.from(signature, 'hex'), Buffer.from(publicKey, 'hex'))) {
-		
-			callback(true);
-			
-		} else {
-		
-			callback(false);
-			
-		}
+		callback(validated);
 		
 	});
 	
 	socket.on('sendTransaction', (toaddress, amount, password, callback) => {
 	
 		(async () => {
-		
 
-			var pattern = /^[a-fA-F0-9]{50}$/;
-					
-			var isvalid = pattern.test(toaddress);
+			var isvalid = bambooCrypto.validateAddress(toaddress);
 					
 			if (Big(amount).lte(0.0001) || Big(amount).plus(0.0001).gt(accountBalance))
 			{
@@ -752,65 +674,8 @@ io.on('connection', (socket) => {
 					
 							let privateKey = decryptedAccount.privateKey;
 							let publicKey = decryptedAccount.publicKey;
-							let formatAmount = parseInt(Big(amount).times(10**4).toFixed(0));
-							let nonce = Date.now();
-							let fee = 1;
-
-							let keyPair = {
-								publicKey: Buffer.from(publicKey, 'hex'),
-								privateKey: Buffer.from(privateKey, 'hex')
-							}
-
-							let trxTimestamp = Date.now();
-						
-							let tx = {
-										"from": loadedAccount, 
-										"to": toaddress, 
-										"fee": fee,
-										"amount": formatAmount, 
-										"timestamp": trxTimestamp
-									};
-
-							let ctx = crypto.createHash('sha256');
-						
-							ctx.update(unhexlify(tx["to"]));
-						
-							ctx.update(unhexlify(tx["from"]));
-
-							let hexfee = Buffer.from(parseInt(tx["fee"]).toString(16).padStart(16, '0'), 'hex');
-							let hexfeea = Buffer.from(hexfee).toJSON().data;
-							hexfeea.reverse();
-							let swapfee = Buffer.from(hexfeea).toString('hex');
-							ctx.update(unhexlify(swapfee));
-
-
-							let hexamount = Buffer.from(parseInt(tx["amount"]).toString(16).padStart(16, '0'), 'hex');
-							let hexamounta = Buffer.from(hexamount).toJSON().data;
-							hexamounta.reverse();
-							let swapamount = Buffer.from(hexamounta).toString('hex');
-							ctx.update(unhexlify(swapamount));
-
-							let hextimestamp = Buffer.from(parseInt(tx["timestamp"]).toString(16).padStart(16, '0'), 'hex');
-							let hextimestampa = Buffer.from(hextimestamp).toJSON().data;
-							hextimestampa.reverse();
-							let swaptimestamp = Buffer.from(hextimestampa).toString('hex');
-							ctx.update(unhexlify(swaptimestamp));
-						
-							let txc_hash = ctx.digest();
-
-							let signature = ed25519.Sign(txc_hash, keyPair); //Using Sign(Buffer, Keypair object)
-
-							let sig2 = signature.toString('hex').toUpperCase();
-
-							let tx_json = {
-										"amount": tx.amount, 
-										"fee": tx.fee, 
-										"from": tx.from,
-										"signature": sig2,
-										"signingKey": publicKey, 
-										"timestamp": String(tx.timestamp),
-										"to": tx.to
-										};
+							
+							let tx_json = bambooCrypto.createSignedTransaction(toAddress, amount, publicKey, privateKey);
 
 							let postResponse = await got.post(selectedPeer + "/add_transaction_json", {json: [tx_json]}).json();
 
@@ -1185,44 +1050,6 @@ async function checkBlocksToDownload() {
 	isDownloadingBlocks = false;
 
 }
-
-function walletAddressFromPublicKey(publicKey) 
-{
-	
-	let bpublicKey = Buffer.from(publicKey, "hex");
-	
-	let hash = crypto.createHash('sha256').update(bpublicKey).digest();
-
-	let hash2 = crypto.createHash('ripemd160').update(hash).digest();
-
-	let hash3 = crypto.createHash('sha256').update(hash2).digest();
-
-	let hash4 = crypto.createHash('sha256').update(hash3).digest();
-	
-	let checksum = hash4[0];
-	
-	let address = [];
-	
-    address[0] = '00';
-    for(let i = 1; i <= 20; i++) 
-    {
-        address[i] = pad(hash2[i-1].toString(16), 2);
-    }
-    address[21] = pad(hash4[0].toString(16), 2);
-    address[22] = pad(hash4[1].toString(16), 2);
-    address[23] = pad(hash4[2].toString(16), 2);
-    address[24] = pad(hash4[3].toString(16), 2);
-    
-    return address.join('').toUpperCase();
-
-}
-
-function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
 
 const encrypt = (text, password) => {
 
