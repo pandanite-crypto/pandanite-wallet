@@ -109,7 +109,7 @@ $(document).ready(function() {
 			{
 			
 				$('#userform2').html(`<div class="right" id="webform">
-									<form class="accountWrapper">
+									<form class="accountWrapper" onsubmit="event.preventDefault();">
 										<fieldset>
 											<center>
 											<h1><img src="../static/media/bamboo-bmb-logo.png" style="height:50px;"> {{ i18n.__("Bamboo Wallet") }}</h1>
@@ -148,7 +148,7 @@ $(document).ready(function() {
 
 						e.preventDefault();
 
-						router.route('GET', '/account', () => {});
+						router.route('GET', '/main', () => {});
 					
 					});		
 								

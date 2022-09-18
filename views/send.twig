@@ -2,7 +2,7 @@
 	<div class="user-form2" id="userform2">
 		<div class="right">
 			<form class="accountWrapper" onsubmit="event.preventDefault();">
-				<center><h2>{{ i18n.__("Account Balance") }}: {{accountBalance}} BMB</h2></center><br />
+				<center><h2>{{ i18n.__("Account Balance") }}: <span id='sendall' style="cursor:pointer">{{accountBalance}}</span> BMB</h2></center><br />
 				<fieldset>
 					<div class="form-group">
 						<label>{{ i18n.__("Send To Account") }}</label>

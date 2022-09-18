@@ -607,7 +607,22 @@
 	
   	function loadSendPage()
   	{
-  	
+
+	  $('#sendall').off('click');
+	  $('#sendall').on('click', function() {
+  
+		try {
+	
+			$('#amount').val(Big($(this).html()).minus(0.0001).toFixed(4));
+		
+		} catch (e) {
+	
+			$('#amount').val('0.0000');
+	
+		}
+  
+	  });  
+	  
 	  $('#amount').off('change');
 	  $('#amount').on('change', function() {
   
