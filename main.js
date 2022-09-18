@@ -790,7 +790,11 @@ io.on('connection', (socket) => {
 						
 						accountTransactions = [];
 						
-						await getAccountTransactions();
+						try {
+							await getAccountTransactions();
+						} catch (e) {
+						
+						}
 
 						callback("OK")
 					

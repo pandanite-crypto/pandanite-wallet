@@ -629,6 +629,8 @@
 		try {
 	
 			$('#amount').val(Big($('#amount').val()).toFixed(4));
+			
+			if (Big($('#amount').val()).lt(0)) $('#amount').val('0.0000');
 		
 		} catch (e) {
 	
@@ -1031,6 +1033,11 @@
 												</div>
 											
 												<div class="form-group">
+													<label>{{ i18n.__("Seed Password") }}</label>
+													<textarea class="form-control" style="height: 55px;">` + accountInfo.seedPassword + `</textarea>
+												</div>
+											
+												<div class="form-group">
 													<label>{{ i18n.__("Public Key") }}</label>
 													<textarea class="form-control" style="height: 55px;">` + accountInfo.publicKey + `</textarea>
 												</div>
@@ -1060,7 +1067,7 @@
 							e.preventDefault();
 
 				  			$('.navbar-brand').removeClass('active');
-				  			$('#gotohome').addClass('active');
+				  			$('#gotosettings').addClass('active');
 				  
 							myTemplate = document.getElementById('templateSettingsPage');
 							normalContent = document.getElementById('maincontent');
