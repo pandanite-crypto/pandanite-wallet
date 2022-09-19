@@ -1046,6 +1046,13 @@ function getAccountTransactions() {
 		
 				let getaccountTransactions = await got(selectedPeer + "/wallet_transactions?wallet=" + loadedAccount).json();
 		
+				for (let i = 0; i < getaccountTransactions.length; i++)
+				{
+				
+					if (getaccountTransactions[i].timestamp < 3000000000) getaccountTransactions[i].timestamp = getaccountTransactions[i].timestamp * 1000;
+				
+				}
+		
 				getaccountTransactions.sort((a, b) => {
 					return b.timestamp - a.timestamp;
 				});
