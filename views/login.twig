@@ -34,8 +34,12 @@
 
 $(document).ready(function() {
 
-  socket.emit('getAccountList', function(accounts, selected) {
-  
+  window.emitMessage('getAccountList', '', function(data) {
+  //socket.emit('getAccountList', function(accounts, selected) {
+
+	let accounts = data.accountList;
+	let selected = data.selected;
+
   	accounts.forEach(item => {
   	
   		if (item == selected)
@@ -82,7 +86,8 @@ $(document).ready(function() {
 		$('#loginbutton').hide();
 		$('#loginprogress').show();
 			
-		socket.emit('login', $('#account').val(), $('#password').val(), function(status) {
+		window.emitMessage('login', {account: $('#account').val(), password: $('#password').val()}, function(status) {
+		//socket.emit('login', $('#account').val(), $('#password').val(), function(status) {
 
 			if (status == 'OK')
 			{

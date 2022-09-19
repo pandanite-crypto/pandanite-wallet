@@ -103,7 +103,7 @@ $(document).ready(function() {
 		$('#restorebutton').hide();
 		$('#restoreprogress').show();
 		
-		socket.emit('restoreAccountPriv', $('#pubkey').val(), $('#privkey').val(), $('#password').val(), function(accountInfo) {
+		window.emitMessage('restoreAccountPriv', {publicKey: $('#pubkey').val(), privateKey: $('#privkey').val(), password: $('#password').val()}, function(accountInfo) {
 
 			if (accountInfo.address)
 			{
@@ -158,7 +158,7 @@ $(document).ready(function() {
 						
 						$("#buttonsdiv").hide();
 
-						socket.emit('print', function(status) {
+						window.emitMessage('print', '', function(status) {
 
 							$("#buttonsdiv").show();
 						

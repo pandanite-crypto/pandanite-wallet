@@ -187,7 +187,7 @@ $(document).ready(function() {
 			seedpassword: $('#seedpassword').val()
   		}
 
-		socket.emit('restoreAccount', restorevars, function(accountInfo) {
+		window.emitMessage('restoreAccount', restorevars, function(accountInfo) {
 
 			if (accountInfo.address)
 			{
@@ -252,7 +252,7 @@ $(document).ready(function() {
 						
 						$("#buttonsdiv").hide();
 
-						socket.emit('print', function(status) {
+						window.emitMessage('print', '', function(status) {
 
 							$("#buttonsdiv").show();
 						

@@ -83,7 +83,7 @@ $(document).ready(function() {
 		$('#createbutton').hide();
 		$('#createprogress').show();
 		
-		socket.emit('createAccount', $('#password').val(), $('#seedpassword').val(), function(accountInfo) {
+		window.emitMessage('createAccount', {password: $('#password').val(), seedpassword: $('#seedpassword').val()}, function(accountInfo) {
 
 			$('#createbutton').show();
 			$('#createprogress').hide();
@@ -151,7 +151,7 @@ $(document).ready(function() {
 						
 						$("#buttonsdiv").hide();
 
-						socket.emit('print', function(status) {
+						window.emitMessage('print', '', function(status) {
 
 							$("#buttonsdiv").show();
 						

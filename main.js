@@ -1,10 +1,8 @@
 require('v8-compile-cache');
 
-const {app, BrowserWindow} 	= require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 
 if (require('electron-squirrel-startup')) return app.quit();
-
-require('events').EventEmitter.prototype._maxListeners = 100;
 
 const twig                 	= require('electron-twig')
 const Router 			 	= require('electron-router')
@@ -20,6 +18,11 @@ const { Octokit } 			= require('@octokit/rest')
 const semver 				= require('semver')
 const packageJson 			= require('./package.json');
 const Bamboo 				= require('bamboo-js');
+
+const EventEmitter			= require('events');
+EventEmitter.prototype._maxListeners = 100;
+
+const socketEvent 			= new EventEmitter();
 
 const bambooCrypto = new Bamboo.crypto();
 
@@ -96,9 +99,6 @@ const i18n = new (require('i18n-2'))({
     extension: '.json'
 });
 
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-
 var peers = ['http://65.21.224.171:3000', 'http://65.21.198.115:3000', 'http://65.108.122.77:3000'];
 var randomPeer = randomIntFromInterval(0, (peers.length - 1));
 var selectedPeer = peers[randomPeer];
@@ -107,7 +107,6 @@ var blockChainHeight = 0;
 var lastDownloadedBlock = 0;
 var isDownloadingBlocks = false;
 var signalTransactionRefresh = false;
-var mainSocket;
 var loadedAccount = '';
 var accountTransactions = [];
 var accountBalance = Big(0).toFixed(4);
@@ -116,7 +115,7 @@ var upgradeAvailable = false;
 var latestGitVersion = '';
 
 let mainWindow
-
+  
 function loadSettings() {
 
 	checkVersion();
@@ -124,29 +123,18 @@ function loadSettings() {
 	db.settings.findOne({account: 'default'}).exec().then((defaultsettings) => {		
 
 		if (defaultsettings && defaultsettings.locale) i18n.setLocale(defaultsettings.locale);
-
-		portfinder.getPort(function (err, port) {
-
-			if (err) app.quit()
-	
-			serverPort = port;
-			server.listen(serverPort);
-
-			console.log('Running on port: ' + serverPort);
-					
-			twig.view = {
-				i18n: i18n,
-				version: bambooAppVersion,
-				localesObject: JSON.stringify(localesObject),
-				peers: JSON.stringify(peers),
-				selectedPeer: selectedPeer,
-				serverPort: serverPort,
-				latestVersion: latestGitVersion,
-			};
-			
-			createWindow();
-
-		});
+		
+		twig.view = {
+			i18n: i18n,
+			version: bambooAppVersion,
+			localesObject: JSON.stringify(localesObject),
+			peers: JSON.stringify(peers),
+			selectedPeer: selectedPeer,
+			serverPort: serverPort,
+			latestVersion: latestGitVersion,
+		};
+		
+		createWindow();
 
 	}).catch((e) => {
 		console.log(e);
@@ -160,7 +148,8 @@ function createWindow () {
     width: 1100,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     },
     icon: "./icons/png/1024x1024.png"
   })
@@ -230,7 +219,11 @@ function createWindow () {
   	
   	checkPendingTransactions();
   	
-  	mainSocket.emit('blockStats', {blockChainHeight: blockChainHeight, lastDownloadedBlock: lastDownloadedBlock, isConnected: isConnected, connectPeer: selectedPeer});
+  	try {
+  		mainWindow.webContents.send("fromMain", 'blockStats', {blockChainHeight: blockChainHeight, isConnected: isConnected, connectPeer: selectedPeer});
+  	} catch (e) {
+  	
+  	}
   	
   }, 10000);
   
@@ -245,13 +238,15 @@ function createWindow () {
 		
 			await getAccountTransactions();
 		
-			mainSocket.emit('accountUpdate');
-
+			mainWindow.webContents.send("fromMain", 'accountUpdate', '')
+			
 		})();
 		
 	}
 	
   },2000);
+  
+  doInitialLoad();
 
 }
 
@@ -286,16 +281,16 @@ function unhexlify(str) {
   return new Uint8Array(result);
 }
 
-io.on('connection', (socket) => { 
-
-	mainSocket = socket;
+function doInitialLoad() {
 
 	console.log('connected'); 
 
-  	socket.emit('blockStats', {blockChainHeight: blockChainHeight, lastDownloadedBlock: lastDownloadedBlock, isConnected: isConnected, connectPeer: selectedPeer});
+  	mainWindow.webContents.send("fromMain", 'blockStats', {blockChainHeight: blockChainHeight, lastDownloadedBlock: lastDownloadedBlock, isConnected: isConnected, connectPeer: selectedPeer});
 
-	socket.on('updateLocale', (locale, callback) => {
+	ipcMain.handle("toMain:updateLocale", async (event, locale) => {
 
+	  return new Promise((resolve, reject) => {
+	  
 		(async () => {
 
 			i18n.setLocale(locale);
@@ -344,34 +339,49 @@ io.on('connection', (socket) => {
 			
 			}
 
-			callback(true);
+			resolve(true);
 		
 		})();
+		
+	  });
 
 	});
-	
-	socket.on('updatePeer', (peer, callback) => {
+
+	ipcMain.handle("toMain:updatePeer", async (event, peer) => {
+
+	  return new Promise((resolve, reject) => {
 
 		selectedPeer = peer;
 		twig.view.selectedPeer = peer;
 		
-		callback(true);
+		resolve(true);
 
+	  });
+	  
 	});
 
-	socket.on('addCustomPeer', (peer, callback) => {
+	ipcMain.handle("toMain:addCustomPeer", async (event, peer) => {
+
+	  return new Promise((resolve, reject) => {
 
 		peers.push(peer);
 		selectedPeer = peer;
 		twig.view.peers = JSON.stringify(peers);
 		twig.view.selectedPeer = peer;
-		
-		callback(true);
+
+		resolve(true);
+
+	  });
 
 	});
-	
-	socket.on('createAccount', (password, seedpassword, callback) => {
-	
+
+	ipcMain.handle("toMain:createAccount", async (event, data) => {
+
+	  let password = data.password;
+	  let seedpassword = data.seedpassword;
+	  
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 		
 			let newAccount = bambooCrypto.generateNewAddress(seedpassword);
@@ -398,15 +408,18 @@ io.on('connection', (socket) => {
 				serverPort: serverPort,
 				latestVersion: latestGitVersion,
 			}
-				
-			callback(newAccount);
+							
+			resolve(newAccount);
 		
 		})();
 
+	  });
 	});
 
-	socket.on('getAccountKeys', (password, callback) => {
-	
+	ipcMain.handle("toMain:getAccountKeys", async (event, password) => {
+
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 
 			let loadAccount = await db.accounts.findOne({account: loadedAccount});
@@ -417,12 +430,12 @@ io.on('connection', (socket) => {
 				try {
 			
 					let decryptedAccount = JSON.parse(decrypt(loadAccount.encryptedData, password));
-					
-					callback(decryptedAccount);
+										
+					resolve(decryptedAccount);
 			
 				} catch (e) {
-			
-					callback("ERR");
+								
+					resolve("ERR");
 			
 				}
 			
@@ -430,16 +443,20 @@ io.on('connection', (socket) => {
 			else
 			{
 			
-				callback("ERR");
-			
+				resolve("ERR");
+
 			}
 
 		})();
-
+		
+	  });
+	  
 	});
-	
-	socket.on('restoreAccount', (options, callback) => {
-	
+
+	ipcMain.handle("toMain:restoreAccount", async (event, options) => {
+
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 
 			let mnemonic = options.word1.trim() + ' ' + options.word2.trim() + ' ' + options.word3.trim() + ' ' + options.word4.trim() + ' ' + options.word5.trim() + ' ' + options.word6.trim() + ' ' + options.word7.trim() + ' ' + options.word8.trim() + ' ' + options.word9.trim() + ' ' + options.word10.trim() + ' ' + options.word11.trim() + ' ' + options.word12.trim();
@@ -449,7 +466,7 @@ io.on('connection', (socket) => {
 			if (isValid == false)
 			{
 			
-				callback(false);
+				resolve(false);
 			
 			}
 			else
@@ -488,16 +505,24 @@ io.on('connection', (socket) => {
 					latestVersion: latestGitVersion,
 				}
 				
-				callback(newAccount);
+				resolve(newAccount);
 			
 			}
 		
 		})();
-
+		
+	  });
+	  
 	});
 
-	socket.on('restoreAccountPriv', (pubkey, privkey, password, callback) => {
+	ipcMain.handle("toMain:restoreAccountPriv", async (event, data) => {
 	
+	  let pubkey = data.publicKey;
+	  let privkey = data.privateKey;
+	  let password = data.password;
+	  
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 
 			try {
@@ -516,7 +541,7 @@ io.on('connection', (socket) => {
 				if (ed25519.Verify(Buffer.from(message, 'utf8'), signature, keyPair.publicKey)) {
 					console.log('Signature valid');
 				} else {
-					callback(false);
+					resolve(false);
 				}
 
 				let address = bambooCrypto.walletAddressFromPublicKey(keyPair.publicKey.toString("hex").toUpperCase());
@@ -555,37 +580,52 @@ io.on('connection', (socket) => {
 					latestVersion: latestGitVersion,
 				}
 				
-				callback(newAccount);
+				resolve(newAccount);
 			
 			} catch (e) {
 		
-				callback(false);
+				resolve(false);
 		
 			}
 		
 		})();
-
+		
+	  });
+	  
 	});
 	
-	socket.on('accountInfo', (callback) => {
+	ipcMain.handle("toMain:accountInfo", async (event, data) => {
+
+	  return new Promise((resolve, reject) => {
 
 		let accountInfo = {
 			address: loadedAccount,
 			balance: accountBalance
 		};
-
-		callback(accountInfo);
-
+		
+		resolve(accountInfo);
+		
+	  });
+	  
 	});
 	
-	socket.on('transactionList', (callback) => {
+	ipcMain.handle("toMain:transactionList", async (event, data) => {
 	
-		callback(accountTransactions);
-	
+	  return new Promise((resolve, reject) => {
+
+		resolve(accountTransactions);
+
+	  });
+	  
 	});
 
-	socket.on('signMessage', (message, password, callback) => {
+	ipcMain.handle("toMain:signMessage", async (event, data) => {
 	
+	  let message = data.message;
+	  let password = data.password;
+
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 		
 			let loadAccount = await db.accounts.findOne({account: loadedAccount});
@@ -605,19 +645,19 @@ io.on('connection', (socket) => {
 						
 						let signature = bambooCrypto.signMessage(message, publicKey, privateKey);
 
-						callback({status: "OK", publicKey: publicKey, signature: signature});
+						resolve({status: "OK", publicKey: publicKey, signature: signature});
 
 					}
 					else
 					{
 				
-						callback({status: "BADPASS"});
+						resolve({status: "BADPASS"});
 				
 					}
 
 				} catch (e) {
 		
-					callback({status: "BADPASS"});
+					resolve({status: "BADPASS"});
 		
 				}
 		
@@ -625,38 +665,54 @@ io.on('connection', (socket) => {
 			else
 			{
 
-				callback({status: "ERR"});
+				resolve({status: "ERR"});
 		
 			}
 		
 		})();
 		
+	  });
+	  
 	});
 
-	socket.on('validateMessage', (message, signature, publicKey, callback) => {
-	
+	ipcMain.handle("toMain:validateMessage", async (event, data) => {
+
+	  let message = data.message;
+	  let signature = data.signature;
+	  let publicKey = data.publicKey;
+	  
+	  return new Promise((resolve, reject) => {
+
 		let validated = bambooCrypto.verifyMessage(message, publicKey, signature);
 
-		callback(validated);
-		
+		resolve(validated);
+
+	  });
+	  
 	});
+
+	ipcMain.handle("toMain:sendTransaction", async (event, data) => {
 	
-	socket.on('sendTransaction', (toaddress, amount, password, callback) => {
-	
+	  let toAddress = data.toaccount;
+	  let amount = data.amount
+	  let password = data.password;
+
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 
-			var isvalid = bambooCrypto.validateAddress(toaddress);
+			var isvalid = bambooCrypto.validateAddress(toAddress);
 					
 			if (Big(amount).lte(0.0001) || Big(amount).plus(0.0001).gt(accountBalance))
 			{
 			
-				callback("BADAMOUNT");
+				resolve("BADAMOUNT");
 			
 			}
 			else if (isvalid == false)
 			{
 			
-				callback("BADADDRESS");
+				resolve("BADADDRESS");
 			
 			}
 			else
@@ -691,27 +747,27 @@ io.on('connection', (socket) => {
 
 								accountTransactions.unshift(tx_json);
 
-								callback("OK");
+								resolve("OK");
 						
 							}
 							else
 							{
 
-								callback("ERR");
+								resolve("ERR");
 					
 							}
 					
 						}
 						else
 						{
-					
-							callback("BADPASS");
+
+							resolve("BADPASS");
 					
 						}
 			
 					} catch (e) {
-			
-						callback("BADPASS");
+
+						resolve("BADPASS");
 			
 					}
 			
@@ -719,7 +775,7 @@ io.on('connection', (socket) => {
 				else
 				{
 
-					callback("ERR");
+					resolve("ERR");
 			
 				}
 			
@@ -727,11 +783,17 @@ io.on('connection', (socket) => {
 
 		
 		})();
-	
+		
+	  });
+	  
 	});
 	
+	ipcMain.handle("toMain:login", async (event, data) => {
 	
-	socket.on('login', (account, password, callback) => {
+	  let account = data.account;
+	  let password = data.password;
+
+	  return new Promise((resolve, reject) => {
 
 		(async () => {
 		
@@ -796,19 +858,19 @@ io.on('connection', (socket) => {
 						
 						}
 
-						callback("OK")
+						resolve("OK");
 					
 					}
 					else
 					{
 					
-						callback("ERR");
+						resolve("ERR");
 					
 					}
 			
 				} catch (e) {
 			
-					callback("ERR");
+					resolve("ERR");
 			
 				}
 			
@@ -816,16 +878,20 @@ io.on('connection', (socket) => {
 			else
 			{
 			
-				callback("ERR");
+				resolve("ERR");
 			
 			}
 			
 		})();
-
+		
+	  });
+	  
 	});
-	
-	socket.on('getAccountList', (callback) => {
-	
+
+	ipcMain.handle("toMain:getAccountList", async (event, data) => {
+
+	  return new Promise((resolve, reject) => {
+
 		(async () => {
 		
 			let accounts = await db.accounts.find({});
@@ -849,35 +915,52 @@ io.on('connection', (socket) => {
 				selected = havedefaultsettings.accountSelect;
 			}
 
-			callback(accountList, selected);
+			resolve({accountList: accountList, selected: selected});
 		
 		})();
-	
+		
+	  });
+	  
 	});
-	
-	socket.on('print', (callback) => {
+
+	ipcMain.handle("toMain:print", async (event, data) => {
+
+	  return new Promise((resolve, reject) => {
 
 		mainWindow.webContents.print({silent:true, printBackground:false})
 
-		callback(true);
+		resolve(true);
 		
+	  });
+	  
+	});
+
+	ipcMain.handle("toMain:forcerefresh", async (event, data) => {
+
+	  return new Promise((resolve, reject) => {
+
+		doForceRefresh();
+		
+		resolve(true);
+	  });
+	  
 	});
 	
-	socket.on('forcerefresh', () => {
-	
-		(async () => {
-	
-			await getAccountTransactions();
-	
-			socket.emit('accountUpdate');
-		
-		})();
-		
-	});
-	
-});
+}
 
 // Functions
+
+function doForceRefresh() {
+
+	(async () => {
+	
+		await getAccountTransactions();
+	
+		mainWindow.webContents.send("fromMain", 'accountUpdate', '')
+		
+	})();
+
+}
 
 function checkMine(transaction) {
 
@@ -928,59 +1011,67 @@ async function checkPendingTransactions() {
 
 }
 
-async function getAccountTransactions() {
+function getAccountTransactions() {
 
-	let chainBlocks = 0;
-	
-	try {
-	
-		chainBlocks = await got(selectedPeer + "/block_count").json();
+	return new Promise((resolve, reject) => {
 
-		lastDownloadedBlock = chainBlocks;
-
-	} catch (e) {
-
-	}
+		(async () => {
 	
-	if (loadedAccount != '')
-	{
+			let chainBlocks = 0;
 	
-		let getaccountTransactions = await got(selectedPeer + "/wallet_transactions?wallet=" + loadedAccount).json();
+			try {
+	
+				chainBlocks = await got(selectedPeer + "/block_count").json();
+
+				lastDownloadedBlock = chainBlocks;
+
+			} catch (e) {
+
+			}
+	
+			if (loadedAccount != '')
+			{
+
+				let accountInfo = await got(selectedPeer + "/ledger?wallet=" + loadedAccount).json();
 		
-		getaccountTransactions.sort((a, b) => {
-			return b.timestamp - a.timestamp;
-		});
+				try {
 		
-		accountTransactions = getaccountTransactions.filter(checkMine);
-
-		let pendingTransactions = await got(selectedPeer + "/tx_json").json();
-		pendingTransactions = pendingTransactions.filter(checkMine);
-
-		for (let i = 0; i < pendingTransactions.length; i++)
-		{
-		
-			let thisTx = pendingTransactions[i];
-			thisTx.pending = true;
+					accountBalance = Big(accountInfo.balance).div(10**4).toFixed(4);
 			
-			accountTransactions.unshift(thisTx);
-		
-		}
-
-		let accountInfo = await got(selectedPeer + "/ledger?wallet=" + loadedAccount).json();
-		
-		try {
-		
-			accountBalance = Big(accountInfo.balance).div(10**4).toFixed(4);
+					twig.view.accountBalance = accountBalance;
 			
-			twig.view.accountBalance = accountBalance;
-			
-		} catch (e) {
+				} catch (e) {
 		
-		}
+				}
+		
+				let getaccountTransactions = await got(selectedPeer + "/wallet_transactions?wallet=" + loadedAccount).json();
+		
+				getaccountTransactions.sort((a, b) => {
+					return b.timestamp - a.timestamp;
+				});
+		
+				accountTransactions = getaccountTransactions.filter(checkMine);
 
-	}
+				let pendingTransactions = await got(selectedPeer + "/tx_json").json();
+				pendingTransactions = pendingTransactions.filter(checkMine);
 
-	return true;
+				for (let i = 0; i < pendingTransactions.length; i++)
+				{
+		
+					let thisTx = pendingTransactions[i];
+					thisTx.pending = true;
+			
+					accountTransactions.unshift(thisTx);
+		
+				}
+
+			}
+
+			resolve(true);
+	
+		})();
+	
+	});
 
 }
 

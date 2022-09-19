@@ -152,37 +152,23 @@
 
 	</div>
   </footer>
-  
-  <!-- Bootstrap core JavaScript -->
-  <script>window.$ = window.jQuery = require('jquery');</script>
+  <script>
+    //load in node libraries
+    require('../renderer.js')
+  </script>
   <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../vendor/socket.io/socket.io.min.js"></script>
   <script src="../vendor/grid/gridjs.umd.js"></script>
   <script src="../vendor/clipboard.min.js"></script>
   <script src="../vendor/sweetalert.min.js"></script>
   <script src="../vendor/jquery.nicescroll.min.js"></script>
 
   <script>
-    var socket = io('http://localhost:{{serverPort}}');
-    socket.on('connect', function(){
-    	console.log('connnected');
-    });
-    socket.on('event', function(data){});
-    socket.on('disconnect', function(){});
-  </script> 
-  <script>
-    //load in node libraries
-    require('../renderer.js')
-    window.QRCode = require('qrcode');
-	window.Big = require('big.js');
-  </script>
-  <script>
   
   	var myTemplate, normalContent, clonedTemplate;
   
   	$('#gotohome').on('click', function() {
-  	
-  		//router.route('GET', '/account', () => {});
+
+  	  //router.route('GET', '/account', () => {});
   		
   	  $('.navbar-brand').removeClass('active');
   	  $(this).addClass('active');
@@ -293,12 +279,36 @@
   		router.route('GET', '/main', () => {});
   	
   	});
+	
+	$(window).on("blockStats", function(e, blockStats) {
 
-	$(document).ready(function() {
-	
-	
+		$('#blockChainHeight').html(blockStats.blockChainHeight);
+
+		if (blockStats.isConnected == true)
+		{
+
+			$('#connectionStatus').html(`<svg style="margin-top:-3px;" width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect y="9.667" width="1.67" height="2.5" fill="#00C186"></rect>
+									<rect x="4.44446" y="5.667" width="1.66667" height="6.67" fill="#00C186"></rect>
+									<rect x="8.88892" y="3" width="1.66667" height="10.83" fill="#00C186"></rect>
+									<rect x="13.3333" width="1.66667" height="15" fill="#00C186"></rect>
+								</svg>`);
+						
+		}
+		else
+		{
+
+			$('#connectionStatus').html(`<svg style="margin-top:-3px;" width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect y="9.667" width="1.67" height="2.5" fill="#CCC"></rect>
+									<rect x="4.44446" y="5.667" width="1.66667" height="6.67" fill="#CCC"></rect>
+									<rect x="8.88892" y="3" width="1.66667" height="10.83" fill="#CCC"></rect>
+									<rect x="13.3333" width="1.66667" height="15" fill="#CCC"></rect>
+								</svg>`);
+
+		}
+
 	});
-	
+
 	var grid;
 	
 	function loadAccountPage()
@@ -314,7 +324,7 @@
 
 			$('#forcerefrsh').addClass('fa-spin');
 		
-			socket.emit('forcerefresh');
+			window.emitMessage('forcerefresh', '', function(){});
 	
 		}
 	
@@ -405,7 +415,7 @@
 		  data: () => {
 			return new Promise(resolve => {
 		
-				socket.emit('transactionList', function(data) {
+				window.emitMessage('transactionList', '', function(data) {
 
 					resolve(
 					  data.map(txinfo => [
@@ -444,11 +454,33 @@
 		  order: 1
 		});
 
-
 		grid.on('ready', function() {
 		
 			infoButtons();
-	 
+
+			window.emitMessage('accountInfo', '', function(accountInfo) {
+
+				$('#accountaddress').html(accountInfo.address);
+		
+				loadedAddress = accountInfo.address;
+		
+				let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+		
+				try {
+					formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+				} catch (e) {
+		
+				}
+		
+				$('#accountValue').html(formattedBalance);
+		
+				$('#forcerefrsh').off('click');
+				$('#forcerefrsh').on('click', function() {
+					forceRefresh();
+				});
+
+			});
+		
 		});
 
 		function infoButtons() {
@@ -522,37 +554,15 @@
 			});
 	
 		}
-	
-		socket.emit('accountInfo', function(accountInfo) {
-	
-			$('#accountaddress').html(accountInfo.address);
-		
-			loadedAddress = accountInfo.address;
-		
-			let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
-		
-			try {
-				formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
-			} catch (e) {
-		
-			}
-		
-			$('#accountValue').html(formattedBalance);
-		
-			$('#forcerefrsh').off('click');
-			$('#forcerefrsh').on('click', function() {
-				forceRefresh();
-			});
 
-		});
+		$(window).off('accountUpdate');
+		$(window).on('accountUpdate', function (e) { 
 
-		socket.on('accountUpdate', function () { 
-		
 			grid.updateConfig({
 			  data: () => {
 				return new Promise(resolve => {
 		
-					socket.emit('transactionList', function(data) {
+					window.emitMessage('transactionList', '', function(data) {
 					
 						resolve(
 						  data.map(txinfo => [
@@ -576,30 +586,6 @@
 				}
 			  ]
 			}).forceRender();
-
-		
-			socket.emit('accountInfo', function(accountInfo) {
-	
-				$('#accountaddress').html(accountInfo.address);
-		
-				loadedAddress = accountInfo.address;
-		
-				let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
-		
-				try {
-					formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
-				} catch (e) {
-		
-				}
-		
-				$('#accountValue').html(formattedBalance);
-
-				$('#forcerefrsh').off('click');
-				$('#forcerefrsh').on('click', function() {
-					forceRefresh();
-				});
-		
-			});
 		
 		});
 
@@ -695,7 +681,7 @@
 			$('#sendbutton').hide();
 			$('#loginprogress').show();
 		
-			socket.emit('sendTransaction', $('#toaccount').val(), $('#amount').val(), $('#password').val(), function(txResponse) {
+			window.emitMessage('sendTransaction', {toaccount: $('#toaccount').val(), amount: $('#amount').val(), password: $('#password').val()}, function(txResponse) {
 
 				if (txResponse == "OK")
 				{
@@ -784,7 +770,7 @@
 				$('#signbutton').hide();
 				$('#signprogress').show();
 		
-				socket.emit('signMessage', $('#message').val(), $('#password').val(), function(signResponse) {
+				window.emitMessage('signMessage', {message: $('#message').val(), password: $('#password').val()}, function(signResponse) {
 
 					$('#signbutton').show();
 					$('#signprogress').hide();
@@ -849,7 +835,7 @@
 				$('#validatebutton').hide();
 				$('#validateprogress').show();
 		
-				socket.emit('validateMessage', $('#message').val(), $('#signature').val(), $('#publickey').val(), function(validateResponse) {
+				window.emitMessage('validateMessage', {message: $('#message').val(), signature: $('#signature').val(), publicKey: $('#publickey').val()}, function(validateResponse) {
 
 					$('#validatebutton').show();
 					$('#validateprogress').hide();
@@ -919,7 +905,7 @@
   	  $('#language').off('change');
 	  $('#language').on('change', (e) => {
   
-		socket.emit('updateLocale', $('#language').val(), function(result) {
+		window.emitMessage('updateLocale', $('#language').val(), function(result) {
 	
 			if (result == true) router.route('GET', '/main', () => {});
 	
@@ -930,7 +916,7 @@
       $('#peer').off('change');
 	  $('#peer').on('change', (e) => {
   
-		socket.emit('updatePeer', $('#peer').val(), function(result) {
+		window.emitMessage('updatePeer', $('#peer').val(), function(result) {
 	
 			if (result == true)
 			{
@@ -967,7 +953,7 @@
 	
 		if (thisPeer.match(regex)) {
 	  
-			socket.emit('addCustomPeer', thisPeer, function(result) {
+			window.emitMessage('addCustomPeer', thisPeer, function(result) {
 	
 				if (result == true) 
 				{
@@ -1011,7 +997,7 @@
 			$('#viewbutton').show();
 			$('#viewprogress').hide();
 				
-			socket.emit('getAccountKeys', $('#password').val(), function(accountInfo) {
+			window.emitMessage('getAccountKeys', $('#password').val(), function(accountInfo) {
 
 				if (accountInfo.address)
 				{
@@ -1087,7 +1073,7 @@
 						
 							$("#topnav").hide();
 
-							socket.emit('print', function(status) {
+							window.emitMessage('print', '', function(status) {
 
 								$("#buttonsdiv").show();
 							

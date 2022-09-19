@@ -31,18 +31,8 @@
   </div>
 	
   <!-- Bootstrap core JavaScript -->
-  <script>window.$ = window.jQuery = require('jquery');</script>
-  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../vendor/socket.io/socket.io.min.js"></script>
-
-  <script>
-    var socket = io('http://localhost:{{serverPort}}');
-    socket.on('connect', function(){
-    	console.log('connnected');
-    });
-    socket.on('event', function(data){});
-    socket.on('disconnect', function(){});
-  </script> 
+  <script>//window.$ = window.jQuery = require('jquery');</script>
+  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script> 
   
   <script>
     //load in node libraries
