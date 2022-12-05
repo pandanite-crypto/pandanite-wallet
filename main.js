@@ -99,7 +99,7 @@ const i18n = new (require('i18n-2'))({
     extension: '.json'
 });
 
-var peers = ['http://65.21.224.171:3000', 'http://65.21.198.115:3000', 'http://65.108.122.77:3000'];
+var peers = ['http://65.108.126.30:3000'];
 var randomPeer = randomIntFromInterval(0, (peers.length - 1));
 var selectedPeer = peers[randomPeer];
 var isConnected = false
