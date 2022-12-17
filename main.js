@@ -99,7 +99,7 @@ const i18n = new (require('i18n-2'))({
     extension: '.json'
 });
 
-var peers = ['http://89.163.145.238:3000'];
+var peers = ['http://pdnnode1.xeggex.com:3000', 'http://pdnnode2.xeggex.com:3000', 'http://pdnnode3.xeggex.com:3000'];
 var randomPeer = randomIntFromInterval(0, (peers.length - 1));
 var selectedPeer = peers[randomPeer];
 var isConnected = false
