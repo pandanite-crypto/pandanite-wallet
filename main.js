@@ -981,7 +981,7 @@ async function checkVersion() {
 
 	const { data: tags } = await octokit.rest.repos.listTags({
 	  owner: 'mrmikeo',
-	  repo: 'bamboo-wallet'
+	  repo: 'pandanite-wallet'
 	});
 
 	var tagsSorted = tags.map(function (item) {
