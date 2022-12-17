@@ -11,7 +11,7 @@
     "makemac": "electron-forge make --platform darwin",
     "makelinux": "electron-forge make --platform linux"
   },
-  "repository": "https://github.com/mrmikeo/bamboo-wallet",
+  "repository": "https://github.com/mrmikeo/pandanite-wallet",
   "keywords": [
     "Pandanite",
     "Bamboo",
