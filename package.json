@@ -1,7 +1,7 @@
 {
-  "name": "Bamboo-Wallet",
+  "name": "Pandanite-Wallet",
   "version": "1.0.4",
-  "description": "Electron Based Wallet for Bamboo Crypto",
+  "description": "Electron Based Wallet for Pandanite",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -13,6 +13,7 @@
   },
   "repository": "https://github.com/mrmikeo/bamboo-wallet",
   "keywords": [
+    "Pandanite",
     "Bamboo",
     "Wallet",
     "Electron"
