@@ -1,19 +1,19 @@
-<h2>Bamboo Electron Wallet</h2>
+<h2>Pandanite Electron Wallet</h2>
 
-<img src="https://github.com/mrmikeo/bamboo-wallet/raw/main/static/media/screenshot.png">
+<img src="https://github.com/mrmikeo/pandanite-wallet/raw/main/static/media/screenshot.png">
 
 <h3>Features</h3>
 
 <li>Light Client.  Does not download blocks to your computer</li>
 <li>Multiple Language Support</li>
-<li>Send/Receive BMB</li>
+<li>Send/Receive PDN</li>
 <li>Sign/Verify Messages</li>
 <li>Restore account from mnemonic phase or keyPair</li>
 
 <h3>Download</h3>
 
 ```
-git clone https://github.com/mrmikeo/bamboo-wallet
+git clone https://github.com/mrmikeo/pandanite-wallet
 ```
 
 <h3>Installation</h3>
