@@ -349,11 +349,11 @@
 				id: 'amount',
 				name: '{{ i18n.__("Amount") }}',
 				formatter: (cell) => {
-					return gridjs.html("<div style='text-align:right;'>" + cell + " BMB</div>");
+					return gridjs.html("<div style='text-align:right;'>" + cell + " PDN</div>");
 				},
 				sort: {
 					compare: (a, b) => {
-					  const code = (x) => parseFloat(x.replace(" BMB", ''));
+					  const code = (x) => parseFloat(x.replace(" PDN", ''));
 
 					  if (code(a) > code(b)) {
 						return 1;
@@ -464,10 +464,10 @@
 		
 				loadedAddress = accountInfo.address;
 		
-				let formattedBalance = Big(0).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+				let formattedBalance = Big(0).toFixed(4) + " PDN <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
 		
 				try {
-					formattedBalance = Big(accountInfo.balance).toFixed(4) + " BMB <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+					formattedBalance = Big(accountInfo.balance).toFixed(4) + " PDN <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
 				} catch (e) {
 		
 				}
