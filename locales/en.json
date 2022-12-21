@@ -132,5 +132,20 @@
 	"Restore With Mnemonic Phrase Instead": "Restore With Mnemonic Phrase Instead",
 	"Error: Enter A Public Key": "Error: Enter A Public Key",
 	"Error: Enter A Private Key": "Error: Enter A Private Key",
-	"Optional - Can Be Blank if you don't have one": "Optional - Can Be Blank if you don't have one"
+	"Optional - Can Be Blank if you don't have one": "Optional - Can Be Blank if you don't have one",
+	"Pandanite Wallet": "Pandanite Wallet",
+	"Restore 24 Words Instead": "Restore 24 Words Instead",
+	"Word 13": "Word 13",
+	"Word 14": "Word 14",
+	"Word 15": "Word 15",
+	"Word 16": "Word 16",
+	"Word 17": "Word 17",
+	"Word 18": "Word 18",
+	"Word 19": "Word 19",
+	"Word 20": "Word 20",
+	"Word 21": "Word 21",
+	"Word 22": "Word 22",
+	"Word 23": "Word 23",
+	"Word 24": "Word 24",
+	"Restore 12 Words Instead": "Restore 12 Words Instead"
 }

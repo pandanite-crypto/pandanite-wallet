@@ -1,6 +1,6 @@
 {
   "name": "Pandanite-Wallet",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Electron Based Wallet for Pandanite",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,8 @@
     "make": "electron-forge make",
     "makewin": "electron-forge make --platform win32",
     "makemac": "electron-forge make --platform darwin",
-    "makelinux": "electron-forge make --platform linux"
+    "makelinux": "electron-forge make --platform linux",
+    "fix": "electron-fix start"
   },
   "repository": "https://github.com/mrmikeo/pandanite-wallet",
   "keywords": [
@@ -42,14 +43,15 @@
     "v8-compile-cache": "^2.3.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.66",
-    "@electron-forge/maker-deb": "^6.0.0-beta.66",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.66",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.66",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.66",
-    "@electron-forge/maker-zip": "^6.0.0-beta.66",
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-dmg": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-wix": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
     "browser-sync": "2.26.3",
     "electron": "^7.3.3",
+    "electron-fix": "^1.1.3",
     "gulp": "4.0.0"
   },
   "config": {
@@ -58,16 +60,6 @@
         "icon": "./icons/mac/icon.icns"
       },
       "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "Bamboo_Wallet",
-            "options": {
-              "iconUrl": "./icons/win/icon.ico",
-              "setupIcon": "./icons/win/icon.ico"
-            }
-          }
-        },
         {
           "name": "@electron-forge/maker-zip",
           "platforms": [
@@ -94,6 +86,15 @@
         {
           "name": "@electron-forge/maker-rpm",
           "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-wix",
+          "config": {
+            "name": "Pandanite Wallet",
+            "icon": "./icons/win/icon.ico",
+            "language": 1033,
+            "manufacturer": "Pandanite Wallet"
+          }
         }
       ]
     }

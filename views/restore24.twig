@@ -68,6 +68,70 @@
 						<span id="word12err" style="color: red;"></span>
 					</div>
 
+
+
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 13") }}</label>
+						<input id="word13" type="text" name="word13" class="form-control" />
+						<span id="word13err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 14") }}</label>
+						<input id="word14" type="text" name="word14" class="form-control"/>
+						<span id="word14err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 15") }}</label>
+						<input id="word15" type="text" name="word15" class="form-control"/>
+						<span id="word15err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 16") }}</label>
+						<input id="word16" type="text" name="word16" class="form-control"/>
+						<span id="word16err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 17") }}</label>
+						<input id="word17" type="text" name="word17" class="form-control"/>
+						<span id="word17err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 18") }}</label>
+						<input id="word18" type="text" name="word18" class="form-control"/>
+						<span id="word18err" style="color: red;"></span>
+					</div>
+
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 19") }}</label>
+						<input id="word19" type="text" name="word19" class="form-control"/>
+						<span id="word19err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 20") }}</label>
+						<input id="word20" type="text" name="word20" class="form-control"/>
+						<span id="word20err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 21") }}</label>
+						<input id="word21" type="text" name="word21" class="form-control"/>
+						<span id="word21err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 22") }}</label>
+						<input id="word22" type="text" name="word22" class="form-control"/>
+						<span id="word22err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 23") }}</label>
+						<input id="word23" type="text" name="word23" class="form-control"/>
+						<span id="word23err" style="color: red;"></span>
+					</div>
+					<div class="form-group" style="width:16.2%; display:inline-block;">
+						<label>{{ i18n.__("Word 24") }}</label>
+						<input id="word24" type="text" name="word24" class="form-control"/>
+						<span id="word24err" style="color: red;"></span>
+					</div>
+					
 					
 					<div class="form-group">
 						<label>{{ i18n.__("Mnemonic Seed Password") }} &nbsp; (<span style="font-weight:bold; color: blue;">{{ i18n.__("Optional - Can Be Blank if you don't have one") }}</span>)</label>
@@ -89,7 +153,7 @@
 					  <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%; color: #fff; text-align:center;">{{ i18n.__("Restoring Account") }} ...</div>
 					</div>
 					<br />
-					<center><button id="cancelbutton" class="btn btn-danger" style="width:100px; margin-top:10px;">{{ i18n.__("Cancel") }}</button> &nbsp; <button id="restoreprivbutton" class="btn btn-primary" style="margin-top:10px;">{{ i18n.__("Restore With KeyPair Instead") }}</button> &nbsp; <button id="restore24button" class="btn btn-primary" style="margin-top:10px;">{{ i18n.__("Restore 24 Words Instead") }}</button></center>
+					<center><button id="cancelbutton" class="btn btn-danger" style="width:100px; margin-top:10px;">{{ i18n.__("Cancel") }}</button> &nbsp; <button id="restoreprivbutton" class="btn btn-primary" style="margin-top:10px;">{{ i18n.__("Restore With KeyPair Instead") }}</button> &nbsp; <button id="restore24button" class="btn btn-primary" style="margin-top:10px;">{{ i18n.__("Restore 12 Words Instead") }}</button></center>
 				</fieldset>
 			</form>
 		</div>
@@ -112,7 +176,7 @@ $(document).ready(function() {
   
   	e.preventDefault();
   	
-  	router.route('GET', '/restore24', () => {});
+  	router.route('GET', '/restore', () => {});
   
   });
   
@@ -133,7 +197,7 @@ $(document).ready(function() {
 		
   	let worderr = false;
   	
-  	for (let i = 1; i <= 12; i++)
+  	for (let i = 1; i <= 24; i++)
   	{
   	
   		$('#word' + i + 'err').html("");
@@ -191,11 +255,23 @@ $(document).ready(function() {
   			word10: $('#word10').val(),
   			word11: $('#word11').val(),
   			word12: $('#word12').val(),
+  			word13: $('#word13').val(),
+  			word14: $('#word14').val(),
+  			word15: $('#word15').val(),
+  			word16: $('#word16').val(),
+  			word17: $('#word17').val(),
+  			word18: $('#word18').val(),
+  			word19: $('#word19').val(),
+  			word20: $('#word20').val(),
+  			word21: $('#word21').val(),
+  			word22: $('#word22').val(),
+  			word23: $('#word23').val(),
+  			word24: $('#word24').val(),
 			password: $('#password').val(),
 			seedpassword: $('#seedpassword').val()
   		}
 
-		window.emitMessage('restoreAccount', restorevars, function(accountInfo) {
+		window.emitMessage('restoreAccount24', restorevars, function(accountInfo) {
 
 			if (accountInfo.address)
 			{

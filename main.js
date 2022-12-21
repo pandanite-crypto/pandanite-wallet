@@ -185,6 +185,13 @@ function createWindow () {
 	
   });
 
+  router.get('/restore24', ( req, res ) => {
+
+	twig.view.currentRoute = 'restore24';
+    mainWindow.loadURL(`file://${__dirname}/views/restore24.twig`);
+	
+  });
+  
   router.get('/restorepriv', ( req, res ) => {
 
 	twig.view.currentRoute = 'restorepriv';
@@ -515,6 +522,68 @@ function doInitialLoad() {
 	  
 	});
 
+	ipcMain.handle("toMain:restoreAccount24", async (event, options) => {
+
+	  return new Promise((resolve, reject) => {
+
+		(async () => {
+
+			let mnemonic = options.word1.trim() + ' ' + options.word2.trim() + ' ' + options.word3.trim() + ' ' + options.word4.trim() + ' ' + options.word5.trim() + ' ' + options.word6.trim() + ' ' + options.word7.trim() + ' ' + options.word8.trim() + ' ' + options.word9.trim() + ' ' + options.word10.trim() + ' ' + options.word11.trim() + ' ' + options.word12.trim() + ' ' + options.word13.trim() + ' ' + options.word14.trim() + ' ' + options.word15.trim() + ' ' + options.word16.trim() + ' ' + options.word17.trim() + ' ' + options.word18.trim() + ' ' + options.word19.trim() + ' ' + options.word20.trim() + ' ' + options.word21.trim() + ' ' + options.word22.trim() + ' ' + options.word23.trim() + ' ' + options.word24.trim();
+
+			let isValid = bip39.validateMnemonic(mnemonic);
+
+			if (isValid == false)
+			{
+			
+				resolve(false);
+			
+			}
+			else
+			{
+			
+				let password = options.password;
+
+				let seedpassword = options.seedpassword;
+
+				let newAccount = bambooCrypto.generateAddressFromMnemonic(mnemonic, seedpassword);
+				
+				let encryptedData = encrypt(JSON.stringify(newAccount), password);
+		
+				let dbrecord = {
+					account: newAccount.address,
+					encryptedData: encryptedData
+				};
+		
+				loadedAccount = newAccount.address;
+						
+				await db.accounts.remove({account: newAccount.address});
+				
+				await db.accounts.insert(dbrecord);
+				
+				await getAccountTransactions();
+
+				twig.view = {
+					i18n: i18n,
+					version: bambooAppVersion,
+					loadedAccount: loadedAccount,
+					accountBalance: accountBalance,
+					localesObject: JSON.stringify(localesObject),
+					peers: JSON.stringify(peers),
+					selectedPeer: selectedPeer,
+					serverPort: serverPort,
+					latestVersion: latestGitVersion,
+				}
+				
+				resolve(newAccount);
+			
+			}
+		
+		})();
+		
+	  });
+	  
+	});
+	
 	ipcMain.handle("toMain:restoreAccountPriv", async (event, data) => {
 	
 	  let pubkey = data.publicKey;
