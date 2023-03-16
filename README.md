@@ -1,6 +1,6 @@
 <h2>Pandanite Electron Wallet</h2>
 
-<img src="https://github.com/mrmikeo/pandanite-wallet/raw/main/static/media/screenshot.png">
+<img src="https://github.com/pandanite-crypto/pandanite-wallet/raw/main/static/media/screenshot.png">
 
 <h3>Features</h3>
 
@@ -13,7 +13,7 @@
 <h3>Download</h3>
 
 ```
-git clone https://github.com/mrmikeo/pandanite-wallet
+git clone https://github.com/pandanite-crypto/pandanite-wallet
 ```
 
 <h3>Installation</h3>
