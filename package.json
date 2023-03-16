@@ -23,7 +23,7 @@
   "license": "CC0-1.0",
   "dependencies": {
     "@octokit/rest": "^19.0.4",
-    "bamboo-js": "git+https://github.com/mrmikeo/bamboo-js.git",
+    "pandanite-js": "git+https://github.com/pandanite-crypto/pandanite-js.git",
     "big.js": "^6.2.1",
     "bip39": "^3.0.4",
     "bootstrap": "4.2.1",
