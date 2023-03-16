@@ -29,7 +29,7 @@ const bambooCrypto = new Bamboo.crypto();
 const bambooAppVersion = 'v' + packageJson.version;
 
 const octokit = new Octokit({
-					userAgent: 'Bamboo Wallet ' + bambooAppVersion,
+					userAgent: 'Pandanite Wallet ' + bambooAppVersion,
 					baseUrl: 'https://api.github.com',
 					request: {
 						agent: undefined,
@@ -99,7 +99,7 @@ const i18n = new (require('i18n-2'))({
     extension: '.json'
 });
 
-var peers = ['http://pdnnode1.xeggex.com:3000', 'http://pdnnode2.xeggex.com:3000', 'http://pdnnode3.xeggex.com:3000'];
+var peers = ['https://pandanite.net'];
 var randomPeer = randomIntFromInterval(0, (peers.length - 1));
 var selectedPeer = peers[randomPeer];
 var isConnected = false
@@ -1049,7 +1049,7 @@ function notYetShown(transaction) {
 async function checkVersion() {
 
 	const { data: tags } = await octokit.rest.repos.listTags({
-	  owner: 'mrmikeo',
+	  owner: 'pandanite-crypto',
 	  repo: 'pandanite-wallet'
 	});
 
