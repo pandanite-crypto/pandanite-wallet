@@ -33,8 +33,10 @@
 body {
     font-size: 14px;
     font-family: "Karla Regular",sans-serif;
-    color: #676b79;
+    color: #FFFFFF;
+    background-color: #191919;
     min-height: 100vh;
+    -webkit-app-region: drag;
 }
 
 .container {
@@ -52,8 +54,8 @@ body {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    background: #fff;
-    margin: 20px;
+    background: #191919;
+    margin: 10px;
     overflow: hidden;
     position: relative;
     z-index: 1;
@@ -65,7 +67,7 @@ body {
     width: calc(100% - 40px);
     display: flex;
     flex-wrap: wrap;
-    background: #fff;
+    background: #191919;
     margin: 20px;
     overflow: hidden;
     position: relative;
@@ -116,7 +118,7 @@ body {
 .user-form:after {
     position: absolute;
     content: "";
-    background: url(./media/bamboo-bmb-logo.png);
+    background: url(./media/bigpanda.png); /*  url(./media/bamboo-bmb-logo.png); */
     background-repeat: no-repeat;
     background-size: 440px;
     left: 50%;
@@ -131,6 +133,11 @@ body {
     top: -10px;
     left: 15px;
     background: #fff;
+    color: #000;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding-left:5px;
+    padding-right:5px;
 }
 
 .user-form2 .form-group label {
@@ -138,6 +145,11 @@ body {
     top: -10px;
     left: 15px;
     background: #fff;
+    color: #000;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding-left:5px;
+    padding-right:5px;
 }
 
 .form-top {
@@ -146,8 +158,9 @@ body {
 
 .nimmu-user-sibmit-button {
     width: 100%;
-    background: #1b236e;
-    border: 2px solid #1b236e;
+    background: #FED31F; /*#1b236e;*/
+    border: 2px solid #FED31F; /*#1b236e;*/
+    color: #000;
     height: 50px;
     line-height: 50px;
     padding: 0;
@@ -158,9 +171,8 @@ body {
     font-size: 16px;
     text-transform: uppercase;
     display: inline-block;
-    padding: 0 25px;
-    background: #fff;
-    color: #3b53db;
+    padding: 0 20px;
+    color: #FFF;
     margin: 30px 0;
     position: relative;
     display: block;
@@ -173,7 +185,7 @@ body {
     top: 50%;
     -webkit-transform: translateY(-50%);
     transform: translateY(-50%);
-    background: #3b53db;
+    background: #FFF;
     height: 1px;
 }
 
@@ -188,7 +200,8 @@ body {
 
 	color: #ccc;
 	border-bottom:0px;
-	font-size:18px;
+	font-size:14px;
+	border-bottom:4px solid #444;
 
 }
 
@@ -207,7 +220,7 @@ body {
 .navbar-brand.active {
 
 	color: #fff; 
-	border-bottom:5px solid #F9D951;
+	border-bottom:4px solid #F9D951;
 
 }
 
@@ -215,5 +228,10 @@ body {
 
 	fill: #F9D951; 
 
+}
+
+.swal-modal {
+    background-color: #000;
+    border: 1px solid #eee;
 }
 

@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 
 
 
@@ -19,7 +20,7 @@
   <link href="../vendor/fontawesome/css/brands.css" rel="stylesheet">
   <link href="../vendor/fontawesome/css/solid.css" rel="stylesheet">
   
-  <link href="../vendor/grid/mermaid.min.css" rel="stylesheet">
+  <link href="../vendor/grid/mermaiddark.css" rel="stylesheet">
   <link href="../static/main.css" rel="stylesheet">
 
     <style>
@@ -31,10 +32,12 @@
 			min-width: 100%;
 		}
 		
+		/*
 		.gridjs-container {
 			color: #000;
 		}
-
+		*/
+		
 		.gridjs-wrapper {
 			border-radius: 4px 4px 0 0;
 			box-shadow: unset;
@@ -63,10 +66,12 @@
 			padding: 6px 12px;
 		}
 
+		/*
 		.gridjs-table tr:nth-child(2n+2){
 			background: #ddd;
 		}
-
+		*/
+		
 		.swal-text:first-child {
 			margin-top: 0px;
 			padding: 10px;
@@ -81,14 +86,30 @@
     	}
     	
 		.swal-footer {
-		  background-color: rgb(245, 248, 250);
-		  margin-top: 32px;
+		  background-color: #12121c;
 		  border-top: 1px solid #E9EEF1;
 		  overflow: hidden;
 		}
 		
 		.popover {
 			z-index: 99999;
+		}
+		
+		.swal-button--confirm {
+			width: 100px;
+			background: #FED31F; /*#1b236e;*/
+			border: 2px solid #FED31F; /*#1b236e;*/
+			color: #000;
+			height: 40px;
+			line-height: 40px;
+			padding: 0;
+			font-size: 16px;
+		}
+
+		.swal-button--confirm:hover {
+			color: #fff;
+    		background: #0b5ed7;
+   			border-color: #0a58ca;
 		}
 		
 		//
@@ -103,20 +124,22 @@
 
 	<div style="position: absolute; width: 100%; height: 100vh;">
 	  <!-- Navigation -->
-	  <nav id="topnav" class="navbar navbar-expand-lg navbar-dark bg-dark static-top" style="position: sticky; z-index:999; top:0px; height:40px;">
-		<div style="width:100%;">
+	  <nav id="topnav" class="navbar navbar-expand-lg navbar-dark bg-dark static-top" style="top:0px;height:40px;display: flex;">
+		
+		<!--img src="../static/media/bamboo-bmb-logo.png" style="height:35px; position: absolute;top: 2px;left: 65px;"-->
+
+		<div style="display: flex;align-items: center;margin-left: auto; margin-right: auto;">
 	
-		  <img src="../static/media/bamboo-bmb-logo.png" style="height:35px; display: inline; margin:2px; margin-left:5px; vertical-align: middle;">
-		  <a id="gotohome" class="navbar-brand active" href="javascript:void (0);" style="margin-left:30px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#ccc" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg> {{ i18n.__("Home") }}</a>
-		  <a id="gotosend" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="#ccc" d="M318 177.5c3.8-8.8 2-19-4.6-26l-136-144C172.9 2.7 166.6 0 160 0s-12.9 2.7-17.4 7.5l-136 144c-6.6 7-8.4 17.2-4.6 26S14.4 192 24 192h88l0 288c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32l0-288h88c9.6 0 18.2-5.7 22-14.5z"/></svg> {{ i18n.__("Send") }}</a>
-		  <a id="gotoreceive" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="#ccc" d="M318 334.5c3.8 8.8 2 19-4.6 26l-136 144c-4.5 4.8-10.8 7.5-17.4 7.5s-12.9-2.7-17.4-7.5l-136-144c-6.6-7-8.4-17.2-4.6-26S14.4 320 24 320h88l0-288c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32l0 288h88c9.6 0 18.2 5.7 22 14.5z"/></svg> {{ i18n.__("Receive") }}</a>
+		  <a id="gotohome" class="navbar-brand active" href="javascript:void (0);" style="margin-left:30px; vertical-align: middle;"><svg style="width:20px; height:20px; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="#ccc" d="M575.8 255.5c0 18-15 32.1-32 32.1h-32l.7 160.2c0 2.7-.2 5.4-.5 8.1V472c0 22.1-17.9 40-40 40H456c-1.1 0-2.2 0-3.3-.1c-1.4 .1-2.8 .1-4.2 .1H416 392c-22.1 0-40-17.9-40-40V448 384c0-17.7-14.3-32-32-32H256c-17.7 0-32 14.3-32 32v64 24c0 22.1-17.9 40-40 40H160 128.1c-1.5 0-3-.1-4.5-.2c-1.2 .1-2.4 .2-3.6 .2H104c-22.1 0-40-17.9-40-40V360c0-.9 0-1.9 .1-2.8V287.6H32c-18 0-32-14-32-32.1c0-9 3-17 10-24L266.4 8c7-7 15-8 22-8s15 2 21 7L564.8 231.5c8 7 12 15 11 24z"/></svg> {{ i18n.__("Home") }}</a>
+		  <a id="gotosend" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="#ccc" d="M318 177.5c3.8-8.8 2-19-4.6-26l-136-144C172.9 2.7 166.6 0 160 0s-12.9 2.7-17.4 7.5l-136 144c-6.6 7-8.4 17.2-4.6 26S14.4 192 24 192h88l0 288c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32l0-288h88c9.6 0 18.2-5.7 22-14.5z"/></svg> {{ i18n.__("Send") }}</a>
+		  <a id="gotoreceive" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;;"><svg style="width:20px; height:20px; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="#ccc" d="M318 334.5c3.8 8.8 2 19-4.6 26l-136 144c-4.5 4.8-10.8 7.5-17.4 7.5s-12.9-2.7-17.4-7.5l-136-144c-6.6-7-8.4-17.2-4.6-26S14.4 320 24 320h88l0-288c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32l0 288h88c9.6 0 18.2 5.7 22 14.5z"/></svg> {{ i18n.__("Receive") }}</a>
 
-		  <a id="gotosign" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg> {{ i18n.__("Sign") }}</a>
-		  <a id="gotoverify" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; margin-top: -3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M211 7.3C205 1 196-1.4 187.6 .8s-14.9 8.9-17.1 17.3L154.7 80.6l-62-17.5c-8.4-2.4-17.4 0-23.5 6.1s-8.5 15.1-6.1 23.5l17.5 62L18.1 170.6c-8.4 2.1-15 8.7-17.3 17.1S1 205 7.3 211l46.2 45L7.3 301C1 307-1.4 316 .8 324.4s8.9 14.9 17.3 17.1l62.5 15.8-17.5 62c-2.4 8.4 0 17.4 6.1 23.5s15.1 8.5 23.5 6.1l62-17.5 15.8 62.5c2.1 8.4 8.7 15 17.1 17.3s17.3-.2 23.4-6.4l45-46.2 45 46.2c6.1 6.2 15 8.7 23.4 6.4s14.9-8.9 17.1-17.3l15.8-62.5 62 17.5c8.4 2.4 17.4 0 23.5-6.1s8.5-15.1 6.1-23.5l-17.5-62 62.5-15.8c8.4-2.1 15-8.7 17.3-17.1s-.2-17.3-6.4-23.4l-46.2-45 46.2-45c6.2-6.1 8.7-15 6.4-23.4s-8.9-14.9-17.3-17.1l-62.5-15.8 17.5-62c2.4-8.4 0-17.4-6.1-23.5s-15.1-8.5-23.5-6.1l-62 17.5L341.4 18.1c-2.1-8.4-8.7-15-17.1-17.3S307 1 301 7.3L256 53.5 211 7.3z"/></svg> {{ i18n.__("Verify") }}</a>
+		  <a id="gotosign" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/></svg> {{ i18n.__("Sign") }}</a>
+		  <a id="gotoverify" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M211 7.3C205 1 196-1.4 187.6 .8s-14.9 8.9-17.1 17.3L154.7 80.6l-62-17.5c-8.4-2.4-17.4 0-23.5 6.1s-8.5 15.1-6.1 23.5l17.5 62L18.1 170.6c-8.4 2.1-15 8.7-17.3 17.1S1 205 7.3 211l46.2 45L7.3 301C1 307-1.4 316 .8 324.4s8.9 14.9 17.3 17.1l62.5 15.8-17.5 62c-2.4 8.4 0 17.4 6.1 23.5s15.1 8.5 23.5 6.1l62-17.5 15.8 62.5c2.1 8.4 8.7 15 17.1 17.3s17.3-.2 23.4-6.4l45-46.2 45 46.2c6.1 6.2 15 8.7 23.4 6.4s14.9-8.9 17.1-17.3l15.8-62.5 62 17.5c8.4 2.4 17.4 0 23.5-6.1s8.5-15.1 6.1-23.5l-17.5-62 62.5-15.8c8.4-2.1 15-8.7 17.3-17.1s-.2-17.3-6.4-23.4l-46.2-45 46.2-45c6.2-6.1 8.7-15 6.4-23.4s-8.9-14.9-17.3-17.1l-62.5-15.8 17.5-62c2.4-8.4 0-17.4-6.1-23.5s-15.1-8.5-23.5-6.1l-62 17.5L341.4 18.1c-2.1-8.4-8.7-15-17.1-17.3S307 1 301 7.3L256 53.5 211 7.3z"/></svg> {{ i18n.__("Verify") }}</a>
 
-		  <a id="gotosettings" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><span class="position-relative"><svg style="width:20px; height:20px; margin-top:-3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336c44.2 0 80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80s35.8 80 80 80z"/></svg>{% if (version != latestVersion) %}<span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle" style="padding: .2rem!important;"></span>{% endif %}</span> {{ i18n.__("Settings") }}</a>
+		  <a id="gotosettings" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><span class="position-relative"><svg style="width:20px; height:20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336c44.2 0 80-35.8 80-80s-35.8-80-80-80s-80 35.8-80 80s35.8 80 80 80z"/></svg>{% if (version != latestVersion) %}<span class="position-absolute top-0 start-100 translate-middle bg-danger border border-light rounded-circle" style="padding: .2rem!important;"></span>{% endif %}</span> {{ i18n.__("Settings") }}</a>
 
-		  <a id="gotologout" class="navbar-brand" href="javascript:void (0);" style="float:right;"><svg style="width:20px; height:20px; margin-top:-3px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M352 96l64 0c17.7 0 32 14.3 32 32l0 256c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c53 0 96-43 96-96l0-256c0-53-43-96-96-96l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-9.4 182.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L242.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"/></svg></a>
+		  <a id="gotologout" class="navbar-brand" href="javascript:void (0);" style="margin-left:20px; vertical-align: middle;"><svg style="width:20px; height:20px; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ccc" d="M352 96l64 0c17.7 0 32 14.3 32 32l0 256c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0c53 0 96-43 96-96l0-256c0-53-43-96-96-96l-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32zm-9.4 182.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L242.7 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128z"/></svg> {{ i18n.__("Logout") }}</a>
 
 	  
 		</div>
@@ -134,7 +157,7 @@
   <footer id="mainfooter" style="position: fixed; z-index:99999; bottom:0px; background-color: #000; height:19px; width:100%;">
 	<div style="display: flex; flex-direction: row; margin: auto; font-size:13px; max-width:100%;">
 
-		<div style="flex:1; width:50%; display: inline-block; text-align:left; white-space: nowrap; overflow: visible; margin-left:10px;">
+		<div style="flex:1; width:33%; display: inline-block; text-align:left; white-space: nowrap; overflow: visible; margin-left:10px;">
 			<span style="margin-right:20px;" id="connectionStatus">
 						<svg style="margin-top:-3px;" width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<rect y="9.667" width="1.67" height="2.5" fill="#CCC"></rect>
@@ -145,8 +168,13 @@
 			</span>
 		</div>
 		
+		<div style="flex:1; width:34%; text-align:center;">
 		
-		<div style="flex:1;  width:50%; display: inline-block; text-align:right; white-space: nowrap; overflow: visible; margin-right:10px; color: #fff;">
+			Pandanite Wallet
+		
+		</div>
+		
+		<div style="flex:1;  width:33%; display: inline-block; text-align:right; white-space: nowrap; overflow: visible; margin-right:10px; color: #fff;">
 			{{ i18n.__("Block #") }} <span id="blockChainHeight">0</span>			
 		</div>
 
@@ -338,7 +366,7 @@
 				id: 'type',
 				name: '{{ i18n.__("Type") }}',
 				formatter: (cell) => {
-					return gridjs.html(cell == 'Send' ? '<span style="color:red;">{{ i18n.__("Send") }}</span>' : '<span style="color:green;">{{ i18n.__("Receive") }}</span>');
+					return gridjs.html(cell == 'Send' ? '<span style="color:rgb(255, 87, 97);">{{ i18n.__("Send") }}</span>' : '<span style="color:rgb(0, 193, 134);">{{ i18n.__("Receive") }}</span>');
 				},
 			},
 			{
@@ -421,7 +449,7 @@
 					  data.map(txinfo => [
 						(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
 						txinfo.to == loadedAddress ? 'Receive' : 'Send',
-						gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
+						gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: #FED31F; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
 						Big(txinfo.amount).div(10**4).toFixed(4),
 						txinfo.from,
 						txinfo.to
@@ -439,7 +467,7 @@
 			render() {
   
 				return gridjs.h('span', {
-									style: 'float:right; font-size:22px; padding: 5px; padding-right:0px;',
+									style: 'color: #fff; float:right; font-size:22px; padding: 5px; padding-right:0px;',
 									id: 'accountValue',
 									}, '');
 
@@ -464,10 +492,10 @@
 		
 				loadedAddress = accountInfo.address;
 		
-				let formattedBalance = Big(0).toFixed(4) + " PDN <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+				let formattedBalance = Big(0).toFixed(4) + " PDN <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer; color: #FED31F;'></i>";
 		
 				try {
-					formattedBalance = Big(accountInfo.balance).toFixed(4) + " PDN <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer;'></i>";
+					formattedBalance = Big(accountInfo.balance).toFixed(4) + " PDN <i id='forcerefrsh' class='fa-solid fa-sync' style='cursor:pointer; color: #FED31F;'></i>";
 				} catch (e) {
 		
 				}
@@ -491,6 +519,7 @@
 				let thistxid = $(this).data('txid');
 				let thisfrom = $(this).data('from');
 				let thisto = $(this).data('to');
+				if (thisfrom == "") thisfrom = "New Coins";
 				let thispending = $(this).data('pending');
 
 				let thisamount = '0.0000';
@@ -511,24 +540,24 @@
 			
 				let thistimestamp = $(this).data('timestamp');
 
-				var htmlcode = `<div style="color: #000;">
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Transaction ID") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-txid" style="font-weight: bold; border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+				var htmlcode = `<div style="color: #fff; background-color: #000;">
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("Transaction ID") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-txid" style="font-weight: bold; border:0px; padding:0px; margin:0px; color: #FED31F; background:transparent;"><svg style="width:16px; height:16px;color: #FED31F; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
 						<div id="copy-input-txid" class="nicescrollable" style="padding:2px;">` + thistxid + `</div>
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("From Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr" style="font-weight: bold;  border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("From Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr" style="font-weight: bold;  border:0px; padding:0px; margin:0px; color: #FED31F; background:transparent;"><svg style="width:16px; height:16px;color: #FED31F; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
 						<div id="copy-input-addr" class="nicescrollable" style="padding:2px;">` + thisfrom + `</div>
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("To Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr2" style="font-weight: bold;  border:0px; padding:0px; margin:0px;"><svg style="width:16px; height:16px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("To Address") }} &nbsp;&nbsp; <button class="copy-button" data-clipboard-target="#copy-input-addr2" style="font-weight: bold;  border:0px; padding:0px; margin:0px; color: #FED31F; background:transparent;"><svg style="width:16px; height:16px;color: #FED31F; " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/></svg></button></div>
 						<div id="copy-input-addr2" class="nicescrollable" style="padding:2px;">` + thisto + `</div>
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Amount") }}</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("Amount") }}</div>
 						<div style="padding:2px;" class="nicescrollable">` + thisamount + `</div>
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Fee") }}</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("Fee") }}</div>
 						<div style="padding:2px;" class="nicescrollable">` + thisfee + `</div>
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Timestamp") }}</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("Timestamp") }}</div>
 						<div style="padding:2px;" class="nicescrollable">` + (new Date(parseInt(thistimestamp))).toLocaleString() + `</div>
-						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: rgb(245, 248, 250); font-size:12px;">{{ i18n.__("Status") }}</div>
+						<div style="margin-left:-20px; margin-right: -20px; padding:2px; padding-left:10px; background-color: #191919; font-size:12px;">{{ i18n.__("Status") }}</div>
 						<div style="padding:2px;" class="nicescrollable">` + (thispending==true?'{{ i18n.__("Pending") }}':'{{ i18n.__("Confirmed") }}') + `</div>
 						</div>`;
 
-				var frag = document.createRange().createContextualFragment('<div style="text-align:left;">' + htmlcode + '</div>');
+				var frag = document.createRange().createContextualFragment('<div style="text-align:left; color: #fff; background-color: #000;">' + htmlcode + '</div>');
   
 				let wrapper = document.createElement('div');
 				wrapper.appendChild(frag);
@@ -568,7 +597,7 @@
 						  data.map(txinfo => [
 							(new Date(parseInt(txinfo.timestamp))).toLocaleString(),
 							txinfo.to == loadedAddress ? 'Receive' : 'Send',
-							gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: blue; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
+							gridjs.html(`<span class='transactioninfo' data-pending="` + (txinfo.pending?txinfo.pending:false) + `" data-txid="` + txinfo.txid + `" data-from="` + txinfo.from + `" data-to="` + txinfo.to + `" data-amount="` + txinfo.amount + `" data-fee="` + txinfo.fee + `" data-timestamp="` + txinfo.timestamp + `" style='font-weight:bold; color: #FED31F; cursor: pointer;'>`+txinfo.txid+`</span>` + (txinfo.pending==true?` <i class="fa-regular fa-clock"></i>`:``)),
 							Big(txinfo.amount).div(10**4).toFixed(4)
 						  ])
 						);
@@ -594,143 +623,149 @@
   	function loadSendPage()
   	{
 
-	  $('#sendall').off('click');
-	  $('#sendall').on('click', function() {
+		window.emitMessage('accountInfo', '', function(accountInfo) {
+
+		  $('#amount').html(accountInfo.balance);
+				
+		  $('#sendall').off('click');
+		  $('#sendall').on('click', function() {
+
+			try {
+
+				$('#amount').val(Big($(this).html()).minus(0.0001).toFixed(4));
+	
+			} catch (e) {
+
+				$('#amount').val('0.0000');
+
+			}
+
+		  });  
   
-		try {
-	
-			$('#amount').val(Big($(this).html()).minus(0.0001).toFixed(4));
+		  $('#amount').off('change');
+		  $('#amount').on('change', function() {
+
+			try {
+
+				$('#amount').val(Big($('#amount').val()).toFixed(4));
 		
-		} catch (e) {
+				if (Big($('#amount').val()).lt(0)) $('#amount').val('0.0000');
 	
-			$('#amount').val('0.0000');
+			} catch (e) {
+
+				$('#amount').val('0.0000');
+
+			}
+
+		  });  
+
+		  $('#sendbutton').off('click');
+		  $('#sendbutton').on('click', (e) => {
+
+			e.preventDefault();
+
+			let valueErr = false;
+
+			let testValue;
 	
-		}
+			try {
+
+				testValue = Big($('#amount').val());
+
+			} catch (e) {
+
+				valueErr = true;
+
+			}
+
+			if (valueErr)
+			{
+
+				$('#amounterr').html("{{ i18n.__("Error: Enter a valid amount") }}");
+
+			}
+			else if (Big(testValue).minus(0.0001).gt({{accountBalance}}))
+			{
+
+				$('#amounterr').html("{{ i18n.__("Error: Value exceeds account balance") }}");
+
+			}
+			else if ($('#toaccount').val() == '')
+			{
+	
+				$('#accounterr').html("{{ i18n.__("Error: Enter an account to send to") }}");
+
+			}
+			else if ($('#amount').val() == '')
+			{
+
+				$('#amounterr').html("{{ i18n.__("Error: Enter an amount") }}");
+
+			}
+			else if ($('#password').val() == '')
+			{
+
+				$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
+
+			}
+			else
+			{
+
+				$('#sendbutton').hide();
+				$('#loginprogress').show();
+	
+				window.emitMessage('sendTransaction', {toaccount: $('#toaccount').val(), amount: $('#amount').val(), password: $('#password').val()}, function(txResponse) {
+
+					if (txResponse == "OK")
+					{
+		
+					  $('.navbar-brand').removeClass('active');
+					  $('#gotohome').addClass('active');
+	
+					  myTemplate = document.getElementById('templateAccountPage');
+					  normalContent = document.getElementById('maincontent');
+					  clonedTemplate = myTemplate.content.cloneNode(true);
+					  normalContent.innerHTML = "";
+					  normalContent.appendChild(clonedTemplate);
   
-	  });  
-	  
-	  $('#amount').off('change');
-	  $('#amount').on('change', function() {
-  
-		try {
-	
-			$('#amount').val(Big($('#amount').val()).toFixed(4));
-			
-			if (Big($('#amount').val()).lt(0)) $('#amount').val('0.0000');
+					  loadAccountPage();
+
+					}
+					else if (txResponse == 'BADADDRESS')
+					{
 		
-		} catch (e) {
-	
-			$('#amount').val('0.0000');
-	
-		}
-  
-	  });  
-
-	  $('#sendbutton').off('click');
-	  $('#sendbutton').on('click', (e) => {
-  
-		e.preventDefault();
-	
-		let valueErr = false;
-	
-		let testValue;
+						$('#accounterr').html("{{ i18n.__("Error: Invalid address.") }}");
 		
-		try {
-	
-			testValue = Big($('#amount').val());
-
-		} catch (e) {
-	
-			valueErr = true;
-	
-		}
-	
-		if (valueErr)
-		{
-
-			$('#amounterr').html("{{ i18n.__("Error: Enter a valid amount") }}");
-	
-		}
-		else if (Big(testValue).minus(0.0001).gt({{accountBalance}}))
-		{
-
-			$('#amounterr').html("{{ i18n.__("Error: Value exceeds account balance") }}");
-	
-		}
-		else if ($('#toaccount').val() == '')
-		{
+					}
+					else if (txResponse == 'BADAMOUNT')
+					{
 		
-			$('#accounterr').html("{{ i18n.__("Error: Enter an account to send to") }}");
-	
-		}
-		else if ($('#amount').val() == '')
-		{
-
-			$('#amounterr').html("{{ i18n.__("Error: Enter an amount") }}");
-	
-		}
-		else if ($('#password').val() == '')
-		{
-
-			$('#passerr').html("{{ i18n.__("Error: Enter your encryption password") }}");
-	
-		}
-		else
-		{
-
-			$('#sendbutton').hide();
-			$('#loginprogress').show();
+						$('#amounterr').html("{{ i18n.__("Error: Invalid amount.") }}");
 		
-			window.emitMessage('sendTransaction', {toaccount: $('#toaccount').val(), amount: $('#amount').val(), password: $('#password').val()}, function(txResponse) {
+					}
+					else if (txResponse == 'BADPASS')
+					{
 
-				if (txResponse == "OK")
-				{
-			
-				  $('.navbar-brand').removeClass('active');
-				  $('#gotohome').addClass('active');
+						$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
+
+					}
+					else
+					{
 		
-				  myTemplate = document.getElementById('templateAccountPage');
-				  normalContent = document.getElementById('maincontent');
-				  clonedTemplate = myTemplate.content.cloneNode(true);
-				  normalContent.innerHTML = "";
-				  normalContent.appendChild(clonedTemplate);
-	  
-				  loadAccountPage();
-
-				}
-				else if (txResponse == 'BADADDRESS')
-				{
-			
-					$('#accounterr').html("{{ i18n.__("Error: Invalid address.") }}");
-			
-				}
-				else if (txResponse == 'BADAMOUNT')
-				{
-			
-					$('#amounterr').html("{{ i18n.__("Error: Invalid amount.") }}");
-			
-				}
-				else if (txResponse == 'BADPASS')
-				{
-
-					$('#passerr').html("{{ i18n.__("Error: Invalid password.") }}");
-
-				}
-				else
-				{
-			
-					$('#passerr').html("{{ i18n.__("Error: An unknown error occurred.") }}");
-			
-				}
-
-				$('#sendbutton').show();
-				$('#loginprogress').hide();
+						$('#passerr').html("{{ i18n.__("Error: An unknown error occurred.") }}");
 		
-			});
-		
-		}
+					}
+
+					$('#sendbutton').show();
+					$('#loginprogress').hide();
 	
-	  })
+				});
+	
+			}
+
+		  });
+		  
+		});
 
   	
   	}

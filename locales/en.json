@@ -147,5 +147,9 @@
 	"Word 22": "Word 22",
 	"Word 23": "Word 23",
 	"Word 24": "Word 24",
-	"Restore 12 Words Instead": "Restore 12 Words Instead"
+	"Restore 12 Words Instead": "Restore 12 Words Instead",
+	"Error: Unable to connect to node": "Error: Unable to connect to node",
+	"Sending Transaction Fee": "Sending Transaction Fee",
+	"Unable to connect to a node.  Enter a node URL": "Unable to connect to a node.  Enter a node URL",
+	"Logout": "Logout"
 }

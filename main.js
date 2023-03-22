@@ -160,10 +160,12 @@ function createWindow() {
         width: 1100,
         height: 600,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
+			nodeIntegration: true,
+			contextIsolation: false,
+			enableRemoteModule: true,
         },
-        icon: "./icons/png/1024x1024.png"
+        icon: "./icons/png/1024x1024.png",
+        titleBarStyle: 'hidden',
     })
 
     mainWindow.loadURL(`file://${__dirname}/views/login.twig`);
@@ -882,6 +884,12 @@ function doInitialLoad() {
 
         let account = data.account;
         let password = data.password;
+        let node = data.node;
+        
+        if (node && node != '' && node != 'default')
+        {
+        	selectedPeer = node;
+        }
 
         return new Promise((resolve, reject) => {
 

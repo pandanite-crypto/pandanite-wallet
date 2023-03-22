@@ -2,10 +2,11 @@
 
 {% block body %}
 	<div class="user-form">
-		<div class="right">
+		<div class="right" style="padding: 20px;">
 			<form class="accountWrapper">
 				<fieldset>
-					<div class="form-group">
+					<center><span style="color: #FED31F; font-size: 27px; font-weight: bold;">Pandanite Wallet {{version}}</span></center>
+					<div class="form-group" style="margin-top: 15px;">
 						<label>{{ i18n.__("Select Account") }}</label>
 						<select id="account" name="account" class="form-control" />
 						</select>
@@ -35,7 +36,6 @@
 $(document).ready(function() {
 
   window.emitMessage('getAccountList', '', function(data) {
-  //socket.emit('getAccountList', function(accounts, selected) {
 
 	let accounts = data.accountList;
 	let selected = data.selected;
@@ -60,6 +60,8 @@ $(document).ready(function() {
 		$('#loginbutton').trigger('click');
 	}
   });
+  
+  var node = 'default';
 	
   $('#loginbutton').on('click', (e) => {
   
@@ -85,10 +87,27 @@ $(document).ready(function() {
 
 		$('#loginbutton').hide();
 		$('#loginprogress').show();
-			
-		window.emitMessage('login', {account: $('#account').val(), password: $('#password').val()}, function(status) {
-		//socket.emit('login', $('#account').val(), $('#password').val(), function(status) {
+		
+		let loginTimeout = setTimeout(function() {
+		
+			// do timeout stuff here.
 
+			swal('{{ i18n.__("Unable to connect to a node.  Enter a node URL") }}', {
+			  content: "input",
+			})
+			.then((value) => {
+			  node = value;
+			});
+			
+			$('#loginprogress').hide();
+			$('#loginbutton').show();
+	
+		},10000);
+			
+		window.emitMessage('login', {account: $('#account').val(), password: $('#password').val(), node: node}, function(status) {
+
+			clearTimeout(loginTimeout);
+			
 			if (status == 'OK')
 			{
 				router.route('GET', '/main', () => {});
