@@ -29,10 +29,40 @@
     src: local('Karla BoldItalic'), url('./fonts/Karla-BoldItalic.woff') format('woff');
 }
 
+@font-face {
+    font-family: 'Roboto Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Roboto Regular'), url('./fonts/Roboto-Regular.ttf') format('ttf');
+}
+    
+
+@font-face {
+    font-family: 'Roboto Italic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Roboto Italic'), url('./fonts/Roboto-Italic.ttf') format('ttf');
+}
+    
+
+@font-face {
+    font-family: 'Roboto Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Roboto Bold'), url('./fonts/Roboto-Bold.ttf') format('ttf');
+}
+    
+
+@font-face {
+    font-family: 'Roboto BoldItalic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Roboto BoldItalic'), url('./fonts/Roboto-BoldItalic.ttf') format('ttf');
+}
 
 body {
     font-size: 14px;
-    font-family: "Karla Regular",sans-serif;
+    font-family: "Roboto Regular",sans-serif;
     color: #FFFFFF;
     background-color: #191919;
     min-height: 100vh;
